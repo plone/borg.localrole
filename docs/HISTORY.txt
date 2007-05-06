@@ -1,0 +1,9 @@
+Changelog for borg.localrole
+
+    (name of developer listed in brackets)
+
+borg.localrole - 1.0 Unreleased
+
+    - Initial package structure.
+      [zopeskel]
+
