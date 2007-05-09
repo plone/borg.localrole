@@ -22,7 +22,10 @@ calling setup_localrole_plugin() will just do nothing.
 Let us create some users.
 
     >>> from Products.PloneTestCase.PloneTestCase import default_user
-    >>> user = self.portal.acl_users.getUserById(default_user)
+    >>> from Products.CMFCore.utils import getToolByName
+
+    >>> acl_users = getToolByName(self.portal, 'acl_users')
+    >>> user = acl_users.getUserById(default_user)
 
 By default, a user does not have any special local roles in a particular 
 folder.
@@ -49,9 +52,7 @@ policy.
     ...         self.context=context
     ...     
     ...     def getLocalRoles(self):
-    ...         roles = {}
-    ...         roles[default_user] = ('Manager',)
-    ...         return roles
+    ...         return {default_user : ('Manager',)}
     ...     
     ...     def getLocalRolesForPrincipal(self, principal):
     ...         principal_id = principal.getId()
@@ -63,11 +64,46 @@ policy.
 
 Now, these roles are appended in the folder:
 
-    >>> user.getRolesInContext(self.folder)
-    ['Member', 'Owner', 'Manager', 'Authenticated']
+    >>> sorted(user.getRolesInContext(self.folder))
+    ['Authenticated', 'Manager', 'Member', 'Owner']
     
 Of course, they do not apply in other places, for which the adapter is not
 registered.
 
-    >>> user.getRolesInContext(self.portal)
-    ['Member', 'Authenticated']
+    >>> sorted(user.getRolesInContext(self.portal))
+    ['Authenticated', 'Member']
+
+It is also possible to assign local roles based on groups. Let us add 
+a group.
+
+    >>> groups = getToolByName(self.portal, 'portal_groups')
+    >>> _ = groups.addGroup('group1')
+
+For this, we need to use the more specific interface IGroupAwareWorkspace.
+This has no additional methods, but we need to make sure the getLocalRoles()
+and getLocalRolesForPrincipal() methods can deal with group principals.
+
+    >>> from borg.localrole.interfaces import IGroupAwareWorkspace
+    >>> from zope.interface import implementsOnly
+
+    >>> class GroupLocalRoles(LocalRoles):
+    ...     implementsOnly(IGroupAwareWorkspace)
+    ...     adapts(IATFolder)
+    ...     
+    ...     def getLocalRoles(self):
+    ...         return {default_user : ('Manager',),
+    ...                 'group1'     : ('Reviewer',),}
+
+    >>> provideAdapter(GroupLocalRoles)
+
+Until we add the user to the group, this has no effect.
+
+    >>> user.getRolesInContext(self.folder)
+    ['Member', 'Owner', 'Manager', 'Authenticated']
+
+But then...
+
+    >>> _ = groups.addPrincipalToGroup(default_user, 'group1')
+    >>> user = acl_users.getUserById(default_user) # need this to get updated groups list
+    >>> sorted(user.getRolesInContext(self.folder))
+    ['Authenticated', 'Manager', 'Member', 'Owner', 'Reviewer']

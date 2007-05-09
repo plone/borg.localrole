@@ -13,6 +13,7 @@ from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
 
 from borg.localrole.interfaces import IWorkspace
+from borg.localrole.interfaces import IGroupAwareWorkspace
 
 manage_addWorkspaceLocalRoleManagerForm = PageTemplateFile(
         "zmi/WorkspaceLocalRoleManagerForm.pt", globals(),
@@ -42,27 +43,32 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
     security.declarePrivate("getRolesInContext")
     def getRolesInContext(self, user, object):
-        roles = []
+        roles = set()
 
         obj, workspace = self._findWorkspace(object)
         if workspace is not None:
             if user._check_context(obj):
-                roles.extend(workspace.getLocalRolesForPrincipal(user))
-                
+                roles.update(workspace.getLocalRolesForPrincipal(user))
+                for group in self._groups(obj, user, workspace):
+                    roles.update(workspace.getLocalRolesForPrincipal(group))
+
         return roles
 
     security.declarePrivate("checkLocalRolesAllowed")
     def checkLocalRolesAllowed(self, user, object, object_roles):
-        roles = []
+        roles = set()
         
         obj, workspace = self._findWorkspace(object)
         if workspace is not None:
             if not user._check_context(obj):
-                return 0
+                return False
+            
             roles = workspace.getLocalRolesForPrincipal(user)
-            for role in roles:
-                if role in object_roles:
-                    return 1
+            for group in self._groups(obj, user, workspace):
+                roles.update(workspace.getLocalRolesForPrincipal(group))
+
+            if roles.intersection(object_roles):
+                return True
         
         return None
 
@@ -72,10 +78,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
         
         obj, workspace = self._findWorkspace(object)
         if workspace is not None:
-            localRoleMap = workspace.getLocalRoles()
-            for (principal, roles) in localRoleMap.items():
-                rolemap.setdefault(principal, set()).update(roles)
-                
+            rolemap = workspace.getLocalRoles()
+            
         return rolemap
         
     # Helper methods
@@ -88,7 +92,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         """
         
         for obj in self._chain(object):
-            workspace = IWorkspace(obj, None)
+            workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
             if workspace is not None:
                 return obj, workspace
         return None, None
@@ -113,13 +117,25 @@ class WorkspaceLocalRoleManager(BasePlugin):
         while context is not None:
             yield context
             
-            funcObject = getattr(context, 'im_self', None )
-            if funcObject is not None:
-                context = aq_inner(funcObject)
+            func_object = getattr(context, 'im_self', None )
+            if func_object is not None:
+                context = aq_inner(func_object)
             else:
                 # Don't use aq_inner() since portal_factory (and probably other)
                 # things, depends on being able to wrap itself in a fake context.
                 context = aq_parent(context)
+                
+    security.declarePrivate("_groups")
+    def _groups(self, obj, user, workspace):
+        """If workspace provides IGroupAwareWorkspace and the user has
+        a getGroups() method, yield each group_id returned by that method.
+        """
+        if IGroupAwareWorkspace.providedBy(workspace):
+            getGroups = getattr(user, 'getGroups', None)
+            if getGroups is not None:
+                acl_users = aq_parent(aq_inner(self))
+                for group_id in getGroups():
+                    yield acl_users.getGroupById(group_id)
 
 classImplements(WorkspaceLocalRoleManager, ILocalRolesPlugin)
 InitializeClass(WorkspaceLocalRoleManager)

@@ -16,3 +16,15 @@ class IWorkspace(Interface):
         """Return a dictonary mapping principals to their roles within
         a workspace.
         """
+
+class IGroupAwareWorkspace(IWorkspace):
+    """A group-aware version of IWorkspace.
+    
+    This should ensure that getLocalRolesForPrincipal() and getLocalRoles()
+    return values for principals which are groups as well as principals
+    which are users.
+    
+    Supporting only IWorkspace instead of IGroupAwareWorkspace will mean a
+    slight performance increase, since there is no need to look up and
+    iterate over groups.
+    """
