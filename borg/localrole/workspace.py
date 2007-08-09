@@ -63,7 +63,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
             if not user._check_context(obj):
                 return False
             
-            roles = workspace.getLocalRolesForPrincipal(user)
+            roles.update(workspace.getLocalRolesForPrincipal(user))
             for group in self._groups(obj, user, workspace):
                 roles.update(workspace.getLocalRolesForPrincipal(group))
 
