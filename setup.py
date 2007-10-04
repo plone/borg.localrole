@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.1rc1'
+version = '1.1rc2'
 
 setup(name='borg.localrole',
       version=version,
