@@ -1,7 +1,18 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:five="http://namespaces.zope.org/five">
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="borg.localrole">
 
     <five:registerPackage package="." initialize=".initialize" />
+    
+    <!-- Register GenericSetup profile used for installation -->
+    <genericsetup:registerProfile
+        name="default"
+        title="b-org local role plug-in"
+        directory="profiles/default"
+        description="This is a PAS plug-in that makes it easy to determine local roles via an adapter lookup"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 
 </configure>

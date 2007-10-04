@@ -1,30 +1,24 @@
 from zope.interface import Interface
+import zope.deferredimport
 
-class IWorkspace(Interface):
-    """A workspace in which custom local roles are needed
-    
-    A workspace gives information to the Pluggable Authentication Service 
-    about local roles. The context will be adapted to this interface to 
-    find out which additional local roles should apply.
-    """
-    
-    def getLocalRolesForPrincipal(principal):
-        """Return a sequence of all local roles for a principal.
+zope.deferredimport.deprecated(
+    "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
+    IWorkspace = 'borg.localrole.bbb.interfaces:IWorkspace'
+    )
+
+zope.deferredimport.deprecated(
+    "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
+    IGroupAwareWorkspace = 'borg.localrole.bbb.interfaces:IGroupAwareWorkspace'
+    )
+
+class ILocalRoleProvider(Interface):
+    """An interface which allows querying the local roles on an object"""
+
+    def getRoles(principal_id):
+        """Returns an iterable of roles granted to the specified user object
         """
 
-    def getLocalRoles():
-        """Return a dictonary mapping principals to their roles within
-        a workspace.
+    def getAllRoles():
+        """Returns an iterable consisting of tuples of the form:
+            (principal_id, sequence_of_roles)
         """
-
-class IGroupAwareWorkspace(IWorkspace):
-    """A group-aware version of IWorkspace.
-    
-    This should ensure that getLocalRolesForPrincipal() and getLocalRoles()
-    return values for principals which are groups as well as principals
-    which are users.
-    
-    Supporting only IWorkspace instead of IGroupAwareWorkspace will mean a
-    slight performance increase, since there is no need to look up and
-    iterate over groups.
-    """
