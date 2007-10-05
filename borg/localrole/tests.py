@@ -1,6 +1,7 @@
 import unittest
 import doctest
 
+from zope.interface import implements
 from zope.app.testing import placelesssetup
 import zope.testing.doctest
 
@@ -10,14 +11,45 @@ from Products.Five import fiveconfigure
 from Testing import ZopeTestCase as ztc
 
 from Products.PloneTestCase import PloneTestCase as ptc
-from Products.PloneTestCase.layer import onsetup, PloneSite
+from Products.PloneTestCase.layer import onsetup
 
 import borg.localrole
+from borg.localrole import factory_adapter
 
 # there is no install package in Zope 2.9
 TEST_INSTALL =True
 if not hasattr(ztc, 'installPackage'):
     TEST_INSTALL = False
+
+
+class SimpleLocalRoleProvider(object):
+    implements(borg.localrole.interfaces.ILocalRoleProvider)
+    def __init__(self, context):
+        self.context = context
+
+    def getRoles(self, user):
+        """Grant everyone the 'Foo' role"""
+        return ('Foo',)
+
+    def getAllRoles(self):
+        """In the real world we would enumerate all users and
+        grant the 'Foo' role to each, but we won't"""
+        yield ('bogus_user', ('Foo',))
+
+
+class DummyUser(object):
+    def __init__(self, uid, group_ids=()):
+        self.id = uid
+        self._groups = group_ids
+
+    def getId(self):
+        return self.id
+
+    def _check_context(self, obj):
+        return True
+
+    def getGroups(self):
+        return self._groups
 
 @onsetup
 def setup_product():
@@ -52,6 +84,8 @@ def test_suite():
         zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
             setUp=placelesssetup.setUp(),
             tearDown=placelesssetup.tearDown()),
+
+        zope.testing.doctest.DocTestSuite(factory_adapter),
 
         ]
 

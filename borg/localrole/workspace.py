@@ -39,24 +39,10 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
         >>> from zope.interface import implements, Interface
         >>> from zope.component import adapts
-        >>> class SimpleLocalRoleProvider(object):
-        ...     adapts(Interface)
-        ...     implements(ILocalRoleProvider)
-        ...
-        ...     def __init__(self, context):
-        ...         self.context = context
-        ...
-        ...     def getRoles(self, user):
-        ...         '''Grant everyone the 'Foo' role'''
-        ...         return ('Foo',)
-        ...
-        ...     def getAllRoles(self):
-        ...         '''In the real world we would enumerate all users and
-        ...         grant the 'Foo' role to each, but we won't'''
-        ...         yield ('bogus_user', ('Foo',))
-
+        >>> from borg.localrole.tests import SimpleLocalRoleProvider
+        >>> from borg.localrole.tests import DummyUser
         >>> from zope.component import provideAdapter
-        >>> provideAdapter(SimpleLocalRoleProvider)
+        >>> provideAdapter(SimpleLocalRoleProvider, adapts=(Interface,))
 
 
     We need an object to adapt, we require nothing of this object,
@@ -68,20 +54,6 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
     And we need some users that we'll check the permissions of::
 
-        >>> class DummyUser(object):
-        ...     def __init__(self, uid, group_ids=()):
-        ...         self.id = uid
-        ...         self._groups = group_ids
-        ...
-        ...     def getId(self):
-        ...         return self.id
-        ...
-        ...     def _check_context(self, obj):
-        ...         return True
-        ...
-        ...     def getGroups(self):
-        ...         return self._groups
-        ...
         >>> user1 = DummyUser('bogus_user')
         >>> user2 = DummyUser('bogus_user2')
 
@@ -120,7 +92,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
         ...     def getAllRoles(self):
         ...         yield (self.userid, self.roles)
 
-        >>> provideAdapter(LessSimpleLocalRoleProvider, name='adapter2')
+        >>> provideAdapter(LessSimpleLocalRoleProvider, adapts=(Interface,),
+        ...                name='adapter2')
 
    This should have no effect on our first user::
 
@@ -254,7 +227,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         ...     userid = 'Group2'
         ...     roles = ('Foobar',)
 
-        >>> provideAdapter(Adapter3, name='group_adapter')
+        >>> provideAdapter(Adapter3, adapts=(Interface,), name='group_adapter')
         >>> rm.getRolesInContext(user4, last)
         ['Foobar', 'Foo']
 
