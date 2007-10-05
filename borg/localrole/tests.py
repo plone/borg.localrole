@@ -14,6 +14,11 @@ from Products.PloneTestCase.layer import onsetup, PloneSite
 
 import borg.localrole
 
+# there is no install package in Zope 2.9
+TEST_INSTALL =True
+if not hasattr(ztc, 'installPackage'):
+    TEST_INSTALL = False
+
 @onsetup
 def setup_product():
     """Set up the additional products required for this package.
@@ -31,8 +36,8 @@ def setup_product():
     # We need to tell the testing framework that these products
     # should be available. This can't happen until after we have loaded
     # the ZCML.
-    
-    ztc.installPackage('borg.localrole')
+    if TEST_INSTALL:
+        ztc.installPackage('borg.localrole')
     
 # The order here is important: We first call the (deferred) function which
 # installs the products we need.Then, we let PloneTestCase set up this 
@@ -42,29 +47,31 @@ setup_product()
 ptc.setupPloneSite(products=['borg.localrole'])
 
 def test_suite():
-    return unittest.TestSuite([
+    suite = [
 
-        ztc.ZopeDocFileSuite(
-            'README.txt', package='borg.localrole',
-            test_class=ptc.FunctionalTestCase,
-            optionflags=(doctest.ELLIPSIS | 
-                         doctest.NORMALIZE_WHITESPACE |
-                         doctest.REPORT_ONLY_FIRST_FAILURE)),
-        
-        ztc.ZopeDocFileSuite(
-            'bbb.txt', package='borg.localrole.bbb',
-            test_class=ptc.FunctionalTestCase,
-            optionflags=(doctest.ELLIPSIS | 
-                         doctest.NORMALIZE_WHITESPACE |
-                         doctest.REPORT_ONLY_FIRST_FAILURE)),
-        
-        
         zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
             setUp=placelesssetup.setUp(),
             tearDown=placelesssetup.tearDown()),
 
-        
-        ])
+        ]
+
+    if TEST_INSTALL:
+        suite.extend([
+            ztc.ZopeDocFileSuite(
+                        'README.txt', package='borg.localrole',
+                        test_class=ptc.FunctionalTestCase,
+                        optionflags=(doctest.ELLIPSIS |
+                                     doctest.NORMALIZE_WHITESPACE |
+                                     doctest.REPORT_ONLY_FIRST_FAILURE)),
+            ztc.ZopeDocFileSuite(
+                        'bbb.txt', package='borg.localrole.bbb',
+                        test_class=ptc.FunctionalTestCase,
+                        optionflags=(doctest.ELLIPSIS |
+                                     doctest.NORMALIZE_WHITESPACE |
+                                     doctest.REPORT_ONLY_FIRST_FAILURE)),
+            ])
+
+    return unittest.TestSuite(suite)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

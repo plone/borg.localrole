@@ -1,15 +1,20 @@
 from zope.interface import Interface
-import zope.deferredimport
+try:
+    from zope.deferredimport import deprecated
+except ImportError:
+    # Zope < 2.10
+    from borg.localrole.bbb.interfaces import IWorkspace
+    from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
+else:
+    deprecated(
+     "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
+     IWorkspace = 'borg.localrole.bbb.interfaces:IWorkspace'
+     )
 
-zope.deferredimport.deprecated(
-    "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
-    IWorkspace = 'borg.localrole.bbb.interfaces:IWorkspace'
-    )
-
-zope.deferredimport.deprecated(
-    "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
-    IGroupAwareWorkspace = 'borg.localrole.bbb.interfaces:IGroupAwareWorkspace'
-    )
+    deprecated(
+     "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
+     IGroupAwareWorkspace = 'borg.localrole.bbb.interfaces:IGroupAwareWorkspace'
+     )
 
 class ILocalRoleProvider(Interface):
     """An interface which allows querying the local roles on an object"""
