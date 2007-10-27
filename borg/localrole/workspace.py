@@ -327,11 +327,12 @@ class WorkspaceLocalRoleManager(BasePlugin):
             else: # XXX: BBB code, kicks in only if there's no proper adapter
                 workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
                 if workspace is not None:
-                    roles = workspace.getRoles(user)
+                    roles = workspace.getLocalRolesForPrincipal(user)
                     for role in check_roles:
                         if role in roles:
                             return 1
                     for group in self._groups(obj, user, workspace):
+                        roles = workspace.getLocalRolesForPrincipal(group)
                         for role in check_roles:
                             if role in roles:
                                 return 1
