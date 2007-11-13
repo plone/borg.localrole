@@ -291,7 +291,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
     security.declarePrivate("getRolesInContext")
     def getRolesInContext(self, user, object):
         # we combine the permission of the user with those of the
-        # gorups she belongs to
+        # groups she belongs to
         principal_ids = self._get_principal_ids(user)
         roles = set()
         if user._check_context(object):
