@@ -21,7 +21,7 @@ By default, a user does not have any special local roles in a particular
 folder.
 
     >>> user.getRolesInContext(self.folder)
-    ['Member', 'Owner', 'Authenticated']
+    ['Owner', 'Member', 'Authenticated']
 
 We will now register a local role adapter, to enable a particular roles
 policy.
@@ -89,7 +89,7 @@ and getLocalRolesForPrincipal() methods can deal with group principals.
 Until we add the user to the group, this has no effect.
 
     >>> user.getRolesInContext(self.folder)
-    ['Member', 'Owner', 'Manager', 'Authenticated']
+    ['Owner', 'Member', 'Manager', 'Authenticated']
 
 But then...
 

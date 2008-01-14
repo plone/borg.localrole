@@ -52,6 +52,9 @@ class DummyUser(object):
     def getGroups(self):
         return self._groups
 
+    def getRoles(self):
+        return ()
+
 @onsetup
 def setup_product():
     """Set up the additional products required for this package.
