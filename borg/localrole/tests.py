@@ -15,6 +15,7 @@ from Products.PloneTestCase.layer import onsetup
 
 import borg.localrole
 from borg.localrole import factory_adapter
+from borg.localrole import default_adapter
 
 # there is no install package in Zope 2.9
 TEST_INSTALL =True
@@ -86,6 +87,7 @@ def test_suite():
             tearDown=placelesssetup.tearDown()),
 
         zope.testing.doctest.DocTestSuite(factory_adapter),
+        zope.testing.doctest.DocTestSuite(default_adapter),
 
         ]
 
