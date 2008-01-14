@@ -283,11 +283,10 @@ class WorkspaceLocalRoleManager(BasePlugin):
         """Iterate over the containment chain, stopping if we hit a
         local role blocker"""
         while obj is not None:
-            obj = aq_inner(obj)
             yield obj
             if getattr(obj, '__ac_local_roles_block__', None):
                 raise StopIteration
-            new = aq_parent(obj)
+            new = aq_parent(aq_inner(obj))
             # if the obj is a method we get the class
             obj = getattr(obj, 'im_self', new)
 
@@ -313,10 +312,12 @@ class WorkspaceLocalRoleManager(BasePlugin):
         roles = set()
         for obj in self._parent_chain(object):
             if user._check_context(obj):
-                for a in self._getAdapters(obj):
+                count = -1
+                for count, a in enumerate(self._getAdapters(obj)):
                     for pid in principal_ids:
                         roles.update(a.getRoles(pid))
-                else: # XXX: BBB code, kicks in only if there's no proper adapter
+                # XXX: BBB code, kicks in only if there's no proper adapter
+                if count == -1:
                     workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
                     if workspace is not None:
                         roles.update(workspace.getLocalRolesForPrincipal(user))
@@ -341,7 +342,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
         check_roles = dict(izip(object_roles, repeat(True)))
         principal_ids = self._get_principal_ids(user)
         for obj in self._parent_chain(object):
-            for a in self._getAdapters(obj):
+            count = -1
+            for count, a in enumerate(self._getAdapters(obj)):
                 for pid in principal_ids:
                     roles = a.getRoles(pid)
                     for role in check_roles:
@@ -350,7 +352,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
                                 return 1
                             else:
                                 return 0
-            else: # XXX: BBB code, kicks in only if there's no proper adapter
+            # XXX: BBB code, kicks in only if there's no proper adapter
+            if count == -1:
                 workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
                 if workspace is not None:
                     roles = workspace.getLocalRolesForPrincipal(user)

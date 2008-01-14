@@ -83,16 +83,7 @@ setup_product()
 ptc.setupPloneSite(products=['borg.localrole'])
 
 def test_suite():
-    suite = [
-
-        zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
-            setUp=placelesssetup.setUp(),
-            tearDown=placelesssetup.tearDown()),
-
-        zope.testing.doctest.DocTestSuite(factory_adapter),
-        zope.testing.doctest.DocTestSuite(default_adapter),
-
-        ]
+    suite = []
 
     if TEST_INSTALL:
         suite.extend([
@@ -100,15 +91,25 @@ def test_suite():
                         'README.txt', package='borg.localrole',
                         test_class=ptc.FunctionalTestCase,
                         optionflags=(doctest.ELLIPSIS |
-                                     doctest.NORMALIZE_WHITESPACE |
-                                     doctest.REPORT_ONLY_FIRST_FAILURE)),
+                                     doctest.NORMALIZE_WHITESPACE)),
             ztc.ZopeDocFileSuite(
                         'bbb.txt', package='borg.localrole.bbb',
                         test_class=ptc.FunctionalTestCase,
                         optionflags=(doctest.ELLIPSIS |
-                                     doctest.NORMALIZE_WHITESPACE |
-                                     doctest.REPORT_ONLY_FIRST_FAILURE)),
+                                     doctest.NORMALIZE_WHITESPACE)),
             ])
+
+    # Add the tests that register adapters at the end
+
+    suite.extend([
+        zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
+            setUp=placelesssetup.setUp(),
+            tearDown=placelesssetup.tearDown()),
+
+        zope.testing.doctest.DocTestSuite(factory_adapter),
+        zope.testing.doctest.DocTestSuite(default_adapter),
+        ])
+
 
     return unittest.TestSuite(suite)
 
