@@ -323,9 +323,6 @@ class WorkspaceLocalRoleManager(BasePlugin):
                         roles.update(workspace.getLocalRolesForPrincipal(user))
                         for group in self._groups(obj, user, workspace):
                             roles.update(workspace.getLocalRolesForPrincipal(group))
-
-        # Add global roles
-        roles.update(user.getRoles())
         return list(roles)
 
     security.declarePrivate("checkLocalRolesAllowed")
