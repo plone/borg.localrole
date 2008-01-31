@@ -20,5 +20,9 @@
            zcml:condition="installed Products.CMFPlone">
       <implements interface=".interfaces.IFactoryTempFolder" />
     </class>
+    
+    <adapter zcml:condition="installed Products.CMFPlone"
+             factory=".factory_adapter.FactoryTempFolderProvider"
+    />
 
 </configure>
