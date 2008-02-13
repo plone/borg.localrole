@@ -271,8 +271,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
     def _parent_chain(self, obj):
         """Iterate over the containment chain, stopping if we hit a
         local role blocker"""
+        obj = aq_inner(obj)
         while obj is not None:
-            obj = aq_inner(obj)
             yield obj
             if getattr(obj, '__ac_local_roles_block__', None):
                 raise StopIteration
