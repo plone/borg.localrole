@@ -2,16 +2,8 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:zcml="http://namespaces.zope.org/zcml">
 
-  <class class="Products.CMFPlone.FactoryTool.TempFolder"
-         zcml:condition="installed Products.CMFPlone">
-    <implements interface=".interfaces.IFactoryTempFolder" />
-  </class>
-
   <adapter
       factory=".default_adapter.DefaultLocalRoleAdapter"
-      />
-  <adapter
-      factory=".factory_adapter.FactoryTempFolderProvider"
       />
 
 </configure>
