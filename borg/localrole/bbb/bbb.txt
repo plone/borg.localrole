@@ -10,8 +10,7 @@ registers it)::
     >>> from zope.component import getGlobalSiteManager
     >>> from borg.localrole.default_adapter import DefaultLocalRoleAdapter
     >>> sm = getGlobalSiteManager()
-    >>> sm.unregisterAdapter(DefaultLocalRoleAdapter)
-    ...
+    >>> result = sm.unregisterAdapter(DefaultLocalRoleAdapter)
 
 Let us first ensure that the plug-in is installed
 
