@@ -15,7 +15,8 @@
         description="This is a PAS plug-in that makes it easy to determine local roles via an adapter lookup"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
-    
+
+    <!-- Installs the Factory Tool adapter if Plone is installed -->
     <class class="Products.CMFPlone.FactoryTool.TempFolder"
            zcml:condition="installed Products.CMFPlone">
       <implements interface=".interfaces.IFactoryTempFolder" />
@@ -23,6 +24,6 @@
     
     <adapter zcml:condition="installed Products.CMFPlone"
              factory=".factory_adapter.FactoryTempFolderProvider"
-    />
+             />
 
 </configure>

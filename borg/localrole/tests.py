@@ -15,6 +15,7 @@ from Products.PloneTestCase.layer import onsetup
 
 import borg.localrole
 from borg.localrole import factory_adapter
+from borg.localrole import default_adapter
 
 # there is no install package in Zope 2.9
 TEST_INSTALL =True
@@ -51,6 +52,9 @@ class DummyUser(object):
     def getGroups(self):
         return self._groups
 
+    def getRoles(self):
+        return ()
+
 @onsetup
 def setup_product():
     """Set up the additional products required for this package.
@@ -79,15 +83,7 @@ setup_product()
 ptc.setupPloneSite(products=['borg.localrole'])
 
 def test_suite():
-    suite = [
-
-        zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
-            setUp=placelesssetup.setUp(),
-            tearDown=placelesssetup.tearDown()),
-
-        zope.testing.doctest.DocTestSuite(factory_adapter),
-
-        ]
+    suite = []
 
     if TEST_INSTALL:
         suite.extend([
@@ -95,15 +91,25 @@ def test_suite():
                         'README.txt', package='borg.localrole',
                         test_class=ptc.FunctionalTestCase,
                         optionflags=(doctest.ELLIPSIS |
-                                     doctest.NORMALIZE_WHITESPACE |
-                                     doctest.REPORT_ONLY_FIRST_FAILURE)),
+                                     doctest.NORMALIZE_WHITESPACE)),
             ztc.ZopeDocFileSuite(
                         'bbb.txt', package='borg.localrole.bbb',
                         test_class=ptc.FunctionalTestCase,
                         optionflags=(doctest.ELLIPSIS |
-                                     doctest.NORMALIZE_WHITESPACE |
-                                     doctest.REPORT_ONLY_FIRST_FAILURE)),
+                                     doctest.NORMALIZE_WHITESPACE)),
             ])
+
+    # Add the tests that register adapters at the end
+
+    suite.extend([
+        zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
+            setUp=placelesssetup.setUp(),
+            tearDown=placelesssetup.tearDown()),
+
+        zope.testing.doctest.DocTestSuite(factory_adapter),
+        zope.testing.doctest.DocTestSuite(default_adapter),
+        ])
+
 
     return unittest.TestSuite(suite)
 

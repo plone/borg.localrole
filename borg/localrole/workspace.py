@@ -250,7 +250,6 @@ class WorkspaceLocalRoleManager(BasePlugin):
         0
 
     """
-    
     meta_type = "Workspace Roles Manager"
     security  = ClassSecurityInfo()
 
@@ -258,6 +257,18 @@ class WorkspaceLocalRoleManager(BasePlugin):
         self.id = id
         self.title = title
 
+    def _get_userfolder(user, obj):
+        """Gets the unwrapped user folder for the user, because we may
+        need to rewrap"""
+        context = user
+        while context is not None:
+            if hasattr(context, 'getId'):
+                if context.getId() == 'acl_users':
+                    break
+            context = aq_parent(aq_inner(context))
+        else:
+            return None
+        return aq_inner(context)
     #
     # ILocalRolesPlugin implementation
     #
@@ -271,12 +282,11 @@ class WorkspaceLocalRoleManager(BasePlugin):
     def _parent_chain(self, obj):
         """Iterate over the containment chain, stopping if we hit a
         local role blocker"""
-        obj = aq_inner(obj)
         while obj is not None:
             yield obj
             if getattr(obj, '__ac_local_roles_block__', None):
                 raise StopIteration
-            new = aq_parent(obj)
+            new = aq_parent(aq_inner(obj))
             # if the obj is a method we get the class
             obj = getattr(obj, 'im_self', new)
 
@@ -292,20 +302,27 @@ class WorkspaceLocalRoleManager(BasePlugin):
     def getRolesInContext(self, user, object):
         # we combine the permission of the user with those of the
         # groups she belongs to
+        uf = self._get_userfolder(user)
+        if uf is not None:
+            # rewrap user with an unwrapped user folder, so
+            # _check_context works appropriately
+            user = aq_inner(user)
+            user = user.__of__(uf)
         principal_ids = self._get_principal_ids(user)
         roles = set()
-        if user._check_context(object):
-            for obj in self._parent_chain(object):
-                for a in self._getAdapters(obj):
+        for obj in self._parent_chain(object):
+            if user._check_context(obj):
+                count = -1
+                for count, a in enumerate(self._getAdapters(obj)):
                     for pid in principal_ids:
                         roles.update(a.getRoles(pid))
-                else: # XXX: BBB code, kicks in only if there's no proper adapter
+                # XXX: BBB code, kicks in only if there's no proper adapter
+                if count == -1:
                     workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
                     if workspace is not None:
                         roles.update(workspace.getLocalRolesForPrincipal(user))
                         for group in self._groups(obj, user, workspace):
                             roles.update(workspace.getLocalRolesForPrincipal(group))
-                    
         return list(roles)
 
     security.declarePrivate("checkLocalRolesAllowed")
@@ -313,29 +330,44 @@ class WorkspaceLocalRoleManager(BasePlugin):
         """Checks if the user has one of the specified roles in the
         given context, short circuits when the first provider granting
         one of the roles is found."""
+        uf = self._get_userfolder(user)
+        if uf is not None:
+            # rewrap user with an unwrapped user folder, so
+            # _check_context works appropriately
+            user = aq_inner(user)
+            user = user.__of__(uf)
         check_roles = dict(izip(object_roles, repeat(True)))
         principal_ids = self._get_principal_ids(user)
-        if not user._check_context(object):
-            return 0
         for obj in self._parent_chain(object):
-            for a in self._getAdapters(obj):
+            count = -1
+            for count, a in enumerate(self._getAdapters(obj)):
                 for pid in principal_ids:
                     roles = a.getRoles(pid)
                     for role in check_roles:
                         if role in roles:
-                            return 1
-            else: # XXX: BBB code, kicks in only if there's no proper adapter
+                            if user._check_context(obj):
+                                return 1
+                            else:
+                                return 0
+            # XXX: BBB code, kicks in only if there's no proper adapter
+            if count == -1:
                 workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
                 if workspace is not None:
                     roles = workspace.getLocalRolesForPrincipal(user)
                     for role in check_roles:
                         if role in roles:
-                            return 1
+                            if user._check_context(obj):
+                                return 1
+                            else:
+                                return 0
                     for group in self._groups(obj, user, workspace):
                         roles = workspace.getLocalRolesForPrincipal(group)
                         for role in check_roles:
                             if role in roles:
-                                return 1
+                                if user._check_context(obj):
+                                    return 1
+                                else:
+                                    return 0
 
         return None
 

@@ -4,6 +4,15 @@ Old tests
 
 This is a test to ensure that the BBB plug-in interfaces continue to work. 
 
+We need to unregister the default adapter to test (installing Plone
+registers it)::
+
+    >>> from zope.component import getGlobalSiteManager
+    >>> from borg.localrole.default_adapter import DefaultLocalRoleAdapter
+    >>> sm = getGlobalSiteManager()
+    >>> sm.unregisterAdapter(DefaultLocalRoleAdapter)
+    ...
+
 Let us first ensure that the plug-in is installed
 
     >>> 'borg_localroles' in self.portal.acl_users.objectIds()
@@ -20,8 +29,9 @@ Then, let us create some users.
 By default, a user does not have any special local roles in a particular 
 folder.
 
-    >>> user.getRolesInContext(self.folder)
-    ['Member', 'Owner', 'Authenticated']
+    >>> 'Manager' in user.getRolesInContext(self.folder)
+    False
+    
 
 We will now register a local role adapter, to enable a particular roles
 policy.
@@ -54,14 +64,14 @@ policy.
 
 Now, these roles are appended in the folder:
 
-    >>> sorted(user.getRolesInContext(self.folder))
-    ['Authenticated', 'Manager', 'Member', 'Owner']
+    >>> 'Manager' in sorted(user.getRolesInContext(self.folder))
+    True
     
 Of course, they do not apply in other places, for which the adapter is not
 registered.
 
-    >>> sorted(user.getRolesInContext(self.portal))
-    ['Authenticated', 'Member']
+    >>> 'Manager' in sorted(user.getRolesInContext(self.portal))
+    False
 
 It is also possible to assign local roles based on groups. Let us add 
 a group.
@@ -88,12 +98,14 @@ and getLocalRolesForPrincipal() methods can deal with group principals.
 
 Until we add the user to the group, this has no effect.
 
-    >>> user.getRolesInContext(self.folder)
-    ['Member', 'Owner', 'Manager', 'Authenticated']
+    >>> 'Manager' in user.getRolesInContext(self.folder)
+    True
 
 But then...
 
     >>> _ = groups.addPrincipalToGroup(default_user, 'group1')
     >>> user = acl_users.getUserById(default_user) # need this to get updated groups list
-    >>> sorted(user.getRolesInContext(self.folder))
-    ['Authenticated', 'Manager', 'Member', 'Owner', 'Reviewer']
+    >>> 'Reviewer' in user.getRolesInContext(self.folder)
+    True
+    >>> 'Manager' in user.getRolesInContext(self.folder)
+    True
