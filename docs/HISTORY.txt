@@ -2,6 +2,14 @@ Changelog for borg.localrole
 
     (name of developer listed in brackets)
 
+borg.localrole - 2.0.1
+
+    - Renamed the default adapter to "default" so that people don't 
+      accidentally override it with an unnamed adapter. Overriding the default
+      should be possible, but is a marginal use case. If it's overridden but
+      not replicated properly, all sorts of problems can result.
+      [optilude]
+
 borg.localrole - 2.0.0 Released April 20th, 2008
 
     - Baseline for Plone 3.1

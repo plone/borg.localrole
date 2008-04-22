@@ -4,6 +4,7 @@
 
   <adapter
       factory=".default_adapter.DefaultLocalRoleAdapter"
+      name="default"
       />
 
 </configure>
