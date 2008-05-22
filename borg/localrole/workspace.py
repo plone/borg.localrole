@@ -33,7 +33,7 @@ def manage_addWorkspaceLocalRoleManager(dispatcher, id, title=None, REQUEST=None
 class WorkspaceLocalRoleManager(BasePlugin):
     """This is the actual plug-in. It takes care of looking up
     ILocalRolesProvider adapters (when available) and granting local roles
-    appropraitely.
+    appropriately.
 
     First we need to make and register an adapter to provide some roles::
 
