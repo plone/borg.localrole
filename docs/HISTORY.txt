@@ -10,6 +10,11 @@ borg.localrole - 2.0.1
       not replicated properly, all sorts of problems can result.
       [optilude]
 
+    - Added exportimport.zcml which registers TitleOnlyExportImport for
+      WorkspaceLocalRoleManager; this allows local roles plug-in to be
+      imported and exported as part of a GenericSetup profile.
+      [rafrombrc]
+
 borg.localrole - 2.0.0 Released April 20th, 2008
 
     - Baseline for Plone 3.1

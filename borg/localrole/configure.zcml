@@ -26,4 +26,6 @@
              factory=".factory_adapter.FactoryTempFolderProvider"
              />
 
+    <include file="exportimport.zcml" />
+
 </configure>
