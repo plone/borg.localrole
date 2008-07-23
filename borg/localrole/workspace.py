@@ -5,7 +5,6 @@ from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.component import getAdapters, adapts
 from zope.interface import implements
-from zope.publisher.interfaces.http import IHTTPRequest
 from zope.annotation.interfaces import IAnnotations
 from plone.memoize.volatile import cache, DontCache
 
@@ -41,7 +40,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
         `volatile.cache` can cache or not by checking if it's possible to
         get a request instance from the object... """
     request = aq_get(obj, 'REQUEST', None)
-    if not IHTTPRequest.providedBy(request):
+    if IAnnotations(request, None) is None:
         raise DontCache
     try:
         oid = obj.getPhysicalPath()
