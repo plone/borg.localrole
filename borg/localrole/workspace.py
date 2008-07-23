@@ -3,8 +3,7 @@ from Globals import InitializeClass
 from Acquisition import aq_inner, aq_parent, aq_get
 from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from zope.component import getAdapters, adapts
-from zope.interface import implements
+from zope.component import getAdapters
 from zope.annotation.interfaces import IAnnotations
 from plone.memoize.volatile import cache, DontCache
 
