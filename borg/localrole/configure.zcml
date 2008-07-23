@@ -28,4 +28,6 @@
 
     <include file="exportimport.zcml" />
 
+    <include package="plone.memoize" />
+
 </configure>

@@ -4,6 +4,9 @@ Changelog for borg.localrole
 
 borg.localrole - 2.0.1
 
+    - Support caching of allowed local roles on the request.
+      [witsch]
+
     - Renamed the default adapter to "default" so that people don't 
       accidentally override it with an unnamed adapter. Overriding the default
       should be possible, but is a marginal use case. If it's overridden but

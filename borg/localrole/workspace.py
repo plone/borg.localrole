@@ -1,10 +1,13 @@
 from itertools import izip, repeat
 from Globals import InitializeClass
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner, aq_parent, aq_get
 from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.component import getAdapters, adapts
 from zope.interface import implements
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.annotation.interfaces import IAnnotations
+from plone.memoize.volatile import cache, DontCache
 
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
@@ -29,6 +32,27 @@ def manage_addWorkspaceLocalRoleManager(dispatcher, id, title=None, REQUEST=None
         REQUEST.RESPONSE.redirect(
                 '%s/manage_workspace?manage_tabs_message=WorkspaceLocalRoleManager+added.'
                 % dispatcher.absolute_url())
+
+
+# memoize support for `checkLocalRolesAllowed`
+def clra_cache_key(method, self, user, obj, object_roles):
+    """ the cache key needs to include all arguments when caching allowed
+        local roles, but the key function also needs to decide whether
+        `volatile.cache` can cache or not by checking if it's possible to
+        get a request instance from the object... """
+    request = aq_get(obj, 'REQUEST', None)
+    if not IHTTPRequest.providedBy(request):
+        raise DontCache
+    try:
+        oid = obj.getPhysicalPath()
+    except AttributeError:
+        oid = id(obj)
+    return (user.getId(), oid, tuple(object_roles))
+
+def store_on_request(method, self, user, obj, object_roles):
+    """ helper for caching local roles on the request """
+    return IAnnotations(aq_get(obj, 'REQUEST'))
+
 
 class WorkspaceLocalRoleManager(BasePlugin):
     """This is the actual plug-in. It takes care of looking up
@@ -326,6 +350,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         return list(roles)
 
     security.declarePrivate("checkLocalRolesAllowed")
+    @cache(get_key=clra_cache_key, get_cache=store_on_request)
     def checkLocalRolesAllowed(self, user, object, object_roles):
         """Checks if the user has one of the specified roles in the
         given context, short circuits when the first provider granting
