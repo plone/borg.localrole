@@ -5,6 +5,7 @@ except ImportError:
     # Zope < 2.10
     from borg.localrole.bbb.interfaces import IWorkspace
     from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
+    IWorkspace, IGroupAwareWorkspace    # make pyflakes happy...
 else:
     deprecated(
      "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
