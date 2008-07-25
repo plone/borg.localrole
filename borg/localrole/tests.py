@@ -104,7 +104,9 @@ def test_suite():
     suite.extend([
         zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
             setUp=placelesssetup.setUp(),
-            tearDown=placelesssetup.tearDown()),
+            tearDown=placelesssetup.tearDown(),
+            optionflags=zope.testing.doctest.ELLIPSIS |
+                        zope.testing.doctest.NORMALIZE_WHITESPACE),
 
         zope.testing.doctest.DocTestSuite(factory_adapter),
         zope.testing.doctest.DocTestSuite(default_adapter),

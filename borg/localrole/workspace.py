@@ -34,10 +34,89 @@ def manage_addWorkspaceLocalRoleManager(dispatcher, id, title=None, REQUEST=None
 
 # memoize support for `checkLocalRolesAllowed`
 def clra_cache_key(method, self, user, obj, object_roles):
-    """ the cache key needs to include all arguments when caching allowed
+    """ The cache key needs to include all arguments when caching allowed
         local roles, but the key function also needs to decide whether
         `volatile.cache` can cache or not by checking if it's possible to
-        get a request instance from the object... """
+        get a request instance from the object.
+
+        To test we'll nee an adaptable object, a user and the method which
+        results' we'd like to cache:
+
+          >>> from zope.interface import implements, Interface
+          >>> class DummyObject(object):
+          ...     implements(Interface)
+          >>> obj = DummyObject()
+
+          >>> from borg.localrole.tests import DummyUser
+          >>> john = DummyUser('john')
+
+          >>> rm = WorkspaceLocalRoleManager('rm', 'A Role Manager')
+          >>> fun = rm.__class__.checkLocalRolesAllowed
+
+        The dummy object doesn't have an acquired request, so no caching
+        can be done:
+
+          >>> clra_cache_key(fun, 'me', john, obj, ['foo', 'bar'])
+          Traceback (most recent call last):
+          ...
+          DontCache
+
+        So let's add one and try again.  Before we also need to mark it as
+        being annotatable, which normally happens elsewhere:
+
+          >>> from ZPublisher.HTTPRequest import HTTPRequest
+          >>> request = HTTPRequest('', dict(HTTP_HOST='nohost:8080'), {})
+
+          >>> from Products.Five.zcml import load_config
+          >>> import zope.component
+          >>> import zope.annotation
+          >>> load_config('meta.zcml', zope.component)
+          >>> load_config('configure.zcml', zope.annotation)
+          >>> from zope.interface import classImplements
+          >>> from zope.annotation.interfaces import IAttributeAnnotatable
+          >>> classImplements(HTTPRequest, IAttributeAnnotatable)
+
+          >>> obj.REQUEST = request
+          >>> clra_cache_key(fun, 'hmm', john, obj, ['foo', 'bar'])
+          ('john', ..., ('foo', 'bar'))
+
+        If the objects happens to have a `getPhysicalPath` method, that should
+        be used instead of the hash:
+
+          >>> class DummyObjectWithPath(DummyObject):
+          ...     def getPhysicalPath(self):
+          ...         return '42!'
+          >>> obj = DummyObjectWithPath()
+          >>> obj.REQUEST = request
+          >>> clra_cache_key(fun, 'hmm', john, obj, ['foo', 'bar'])
+          ('john', '42!', ('foo', 'bar'))
+
+        Now let's check if the results of a call to `checkLocalRolesAllowed`
+        is indeed cached, i.e. is the request was annotated correctly.  First
+        try to log the method invocation, though.  As monkey patching in
+        something between the original method and the already applied cache
+        decorator is tricky, we abuse `_get_userfolder`, which is called
+        first thing in `checkLocalRolesAllowed`:
+
+          >>> original = rm._get_userfolder
+          >>> def logger(self, *args, **kw):
+          ...     print 'checkLocalRolesAllowed called...'
+          ...     return original(self, *args, **kw)
+          >>> rm._get_userfolder = logger
+
+          >>> print rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar'])
+          checkLocalRolesAllowed called...
+          None
+          >>> IAnnotations(request)
+          {"borg.localrole.workspace.checkLocalRolesAllowed:('john', '42!', ('foo', 'bar'))": None}
+
+        Calling the method a second time should directly return the cached
+        value, i.e. the logger shouldn't print anything:
+
+          >>> print rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar'])
+          None
+
+    """
     request = aq_get(obj, 'REQUEST', None)
     if IAnnotations(request, None) is None:
         raise DontCache
