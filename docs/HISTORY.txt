@@ -2,7 +2,7 @@ Changelog for borg.localrole
 
     (name of developer listed in brackets)
 
-borg.localrole - 2.0.1 Unreleased
+borg.localrole - 2.0.1 Released July 31st, 2008
 
     - Support caching of allowed local roles on the request.
       [witsch]
