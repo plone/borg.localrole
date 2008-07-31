@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from os.path import join
 
 name = 'borg.localrole'
-version = '2.0.1'
+version = '2.0.2'
 
 path = join(*name.split('.'))
 readme = open(join(path, 'README.txt')).read()
