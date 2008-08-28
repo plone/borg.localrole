@@ -1,4 +1,3 @@
-from itertools import izip, repeat
 from Globals import InitializeClass
 from Acquisition import aq_inner, aq_parent, aq_get
 from AccessControl import ClassSecurityInfo
@@ -438,38 +437,35 @@ class WorkspaceLocalRoleManager(BasePlugin):
             # _check_context works appropriately
             user = aq_inner(user)
             user = user.__of__(uf)
-        check_roles = dict(izip(object_roles, repeat(True)))
+        check_roles = set(object_roles)
         principal_ids = self._get_principal_ids(user)
         for obj in self._parent_chain(object):
             count = -1
             for count, a in enumerate(self._getAdapters(obj)):
                 for pid in principal_ids:
                     roles = a.getRoles(pid)
-                    for role in check_roles:
-                        if role in roles:
-                            if user._check_context(obj):
-                                return 1
-                            else:
-                                return 0
+                    if check_roles.intersection(roles):
+                        if user._check_context(obj):
+                            return 1
+                        else:
+                            return 0
             # XXX: BBB code, kicks in only if there's no proper adapter
             if count == -1:
                 workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
                 if workspace is not None:
                     roles = workspace.getLocalRolesForPrincipal(user)
-                    for role in check_roles:
-                        if role in roles:
+                    if check_roles.intersection(roles):
+                        if user._check_context(obj):
+                            return 1
+                        else:
+                            return 0
+                    for group in self._groups(obj, user, workspace):
+                        roles = workspace.getLocalRolesForPrincipal(group)
+                        if check_roles.intersection(roles):
                             if user._check_context(obj):
                                 return 1
                             else:
                                 return 0
-                    for group in self._groups(obj, user, workspace):
-                        roles = workspace.getLocalRolesForPrincipal(group)
-                        for role in check_roles:
-                            if role in roles:
-                                if user._check_context(obj):
-                                    return 1
-                                else:
-                                    return 0
 
         return None
 
