@@ -4,6 +4,8 @@ Changelog for borg.localrole
 
 borg.localrole - 2.0.2 Unreleased
 
+    - Specify package dependencies.
+      [hannosch]
 
 borg.localrole - 2.0.1 Released July 31st, 2008
 
