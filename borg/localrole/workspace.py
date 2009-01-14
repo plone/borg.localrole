@@ -1,4 +1,4 @@
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from Acquisition import aq_inner, aq_parent, aq_get
 from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
