@@ -2,17 +2,16 @@ from setuptools import setup, find_packages
 from os.path import join
 
 name = 'borg.localrole'
-version = '2.0.2'
+version = '3.0'
 
-path = join(*name.split('.'))
-readme = open(join(path, 'README.txt')).read()
-history = open(join('docs', 'HISTORY.txt')).read().replace(name + ' - ', '')
+readme = open('README.txt').read()
+history = open('CHANGES.txt').read()
 
 setup(name = name,
       version = version,
       description = 'A PAS plugin which can manage local roles via an '
                     'adapter lookup on the current context',
-      long_description = readme[readme.find('\n\n'):] + '\n' + history,
+      long_description = readme + '\n' + history,
       keywords = 'Plone PAS local roles',
       author = 'Borg Collective',
       author_email = 'borg@plone.org',
@@ -41,8 +40,8 @@ setup(name = name,
         'Products.PlonePAS',
         'Products.PluggableAuthService',
         'plone.memoize',
-        # 'Acquisition',
-        # 'Zope2',
+        'Acquisition',
+        'Zope2',
       ],
       classifiers = [
         'Development Status :: 5 - Production/Stable',
