@@ -4,6 +4,9 @@ Changelog
 3.0 - Unreleased
 ----------------
 
+- Added the `replace_local_role_manager` method formerly found in CMFPlone.
+  [hannosch]
+
 - Standardize package documentation and remove invalid license files.
   [hannosch]
 
