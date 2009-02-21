@@ -17,11 +17,6 @@ import borg.localrole
 from borg.localrole import factory_adapter
 from borg.localrole import default_adapter
 
-# there is no install package in Zope 2.9
-TEST_INSTALL =True
-if not hasattr(ztc, 'installPackage'):
-    TEST_INSTALL = False
-
 
 class SimpleLocalRoleProvider(object):
     implements(borg.localrole.interfaces.ILocalRoleProvider)
@@ -72,32 +67,30 @@ def setup_product():
     # We need to tell the testing framework that these products
     # should be available. This can't happen until after we have loaded
     # the ZCML.
-    if TEST_INSTALL:
-        ztc.installPackage('borg.localrole')
+    ztc.installPackage('borg.localrole')
     
 # The order here is important: We first call the (deferred) function which
 # installs the products we need.Then, we let PloneTestCase set up this 
 # product on installation.
 
 setup_product()
-ptc.setupPloneSite(products=['borg.localrole'])
+ptc.setupPloneSite(extension_profiles=['borg.localrole:default'])
 
 def test_suite():
     suite = []
 
-    if TEST_INSTALL:
-        suite.extend([
-            ztc.ZopeDocFileSuite(
-                        'README.txt', package='borg.localrole',
-                        test_class=ptc.FunctionalTestCase,
-                        optionflags=(doctest.ELLIPSIS |
-                                     doctest.NORMALIZE_WHITESPACE)),
-            ztc.ZopeDocFileSuite(
-                        'bbb.txt', package='borg.localrole.bbb',
-                        test_class=ptc.FunctionalTestCase,
-                        optionflags=(doctest.ELLIPSIS |
-                                     doctest.NORMALIZE_WHITESPACE)),
-            ])
+    suite.extend([
+        ztc.ZopeDocFileSuite(
+                    'README.txt', package='borg.localrole',
+                    test_class=ptc.FunctionalTestCase,
+                    optionflags=(doctest.ELLIPSIS |
+                                 doctest.NORMALIZE_WHITESPACE)),
+        ztc.ZopeDocFileSuite(
+                    'bbb.txt', package='borg.localrole.bbb',
+                    test_class=ptc.FunctionalTestCase,
+                    optionflags=(doctest.ELLIPSIS |
+                                 doctest.NORMALIZE_WHITESPACE)),
+        ])
 
     # Add the tests that register adapters at the end
 
