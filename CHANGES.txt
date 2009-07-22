@@ -4,6 +4,9 @@ Changelog
 3.0 - Unreleased
 ----------------
 
+- Use `Testing.ZopeTestCase.placeless` instead of `zope.app.testing.placeless`.
+  [hannosch]
+
 - Adjusted test setup for Plone 5.
   [hannosch]
 

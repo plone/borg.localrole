@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from os.path import join
 
 name = 'borg.localrole'
 version = '3.0'
@@ -24,7 +23,6 @@ setup(name = name,
       zip_safe = False,
       extras_require=dict(
         test=[
-            'zope.app.testing',
             'Products.ATContentTypes',
             'Products.PloneTestCase',
         ]

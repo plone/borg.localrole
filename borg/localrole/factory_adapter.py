@@ -9,8 +9,8 @@ class FactoryTempFolderProvider(object):
     """A simple local role provider which just gathers the roles from
     the desired context::
 
-        >>> from zope.app.testing import placelesssetup
-        >>> placelesssetup.setUp()
+        >>> from Testing.ZopeTestCase import placeless
+        >>> placeless.setUp()
         >>> from zope.component import provideAdapter
         >>> from zope.interface import Interface, implements, directlyProvides
         >>> from borg.localrole.workspace import WorkspaceLocalRoleManager
@@ -87,7 +87,7 @@ class FactoryTempFolderProvider(object):
         {}
 
 
-        >>> placelesssetup.tearDown()
+        >>> placeless.tearDown()
 
     """
     adapts(IFactoryTempFolder)

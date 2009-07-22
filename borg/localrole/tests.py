@@ -2,7 +2,6 @@ import unittest
 import doctest
 
 from zope.interface import implements
-from zope.app.testing import placelesssetup
 import zope.testing.doctest
 
 from Products.Five import zcml
@@ -84,8 +83,8 @@ def test_suite():
 
     suite.extend([
         zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
-            setUp=placelesssetup.setUp(),
-            tearDown=placelesssetup.tearDown(),
+            setUp=ztc.placeless.setUp(),
+            tearDown=ztc.placeless.tearDown(),
             optionflags=zope.testing.doctest.ELLIPSIS |
                         zope.testing.doctest.NORMALIZE_WHITESPACE),
 
