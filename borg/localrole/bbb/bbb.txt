@@ -108,3 +108,9 @@ But then...
     True
     >>> 'Manager' in user.getRolesInContext(self.folder)
     True
+
+Clean up test environment...
+
+    >>> result = sm.unregisterAdapter(LocalRoles)
+    >>> result = sm.unregisterAdapter(GroupLocalRoles)
+    >>> sm.registerAdapter(DefaultLocalRoleAdapter, name="default")

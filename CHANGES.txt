@@ -4,6 +4,9 @@ Changelog
 3.0 - Unreleased
 ----------------
 
+- Avoid polluting test environment with extra adapter registrations.
+  [davisagli]
+
 - Use `Testing.ZopeTestCase.placeless` instead of `zope.app.testing.placeless`.
   [hannosch]
 
