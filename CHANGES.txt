@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0 - Unreleased
+3.0 - 2009-11-17
 ----------------
 
 - Avoid polluting test environment with extra adapter registrations.
