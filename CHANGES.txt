@@ -1,8 +1,8 @@
 Changelog
 =========
 
-3.0 - 2009-11-17
-----------------
+3.0a1 - 2009-11-17
+------------------
 
 - Avoid polluting test environment with extra adapter registrations.
   [davisagli]
