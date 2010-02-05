@@ -399,10 +399,12 @@ class WorkspaceLocalRoleManager(BasePlugin):
             # if the obj is a method we get the class
             obj = getattr(obj, 'im_self', new)
 
+    from profilehooks import profile
+    @profile
     def _get_principal_ids(self, user):
         """Returns a list of the ids of all involved security
         principals: the user and all groups that they belong
-        to. (Note: recursive groups are not yet supported"""
+        to."""
         plugins = aq_parent(aq_inner(self))['plugins']
         principal_ids = getGroupsForPrincipal(user, plugins)
         principal_ids.insert(0, user.getId())
