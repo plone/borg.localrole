@@ -399,8 +399,6 @@ class WorkspaceLocalRoleManager(BasePlugin):
             # if the obj is a method we get the class
             obj = getattr(obj, 'im_self', new)
 
-    from profilehooks import profile
-    @profile
     def _get_principal_ids(self, user):
         """Returns a list of the ids of all involved security
         principals: the user and all groups that they belong
