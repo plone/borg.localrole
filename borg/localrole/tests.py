@@ -1,6 +1,8 @@
 import unittest
 import doctest
 
+from Acquisition import Implicit
+
 from zope.interface import implements
 import zope.testing.doctest
 
@@ -16,6 +18,11 @@ import borg.localrole
 from borg.localrole import factory_adapter
 from borg.localrole import default_adapter
 
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
+from Products.PluggableAuthService.PluggableAuthService import _PLUGIN_TYPE_INFO
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from Products.PluggableAuthService.plugins.tests.helpers import FauxPAS
+from Products.PluginRegistry.PluginRegistry import PluginRegistry
 
 class SimpleLocalRoleProvider(object):
     implements(borg.localrole.interfaces.ILocalRoleProvider)
@@ -32,7 +39,7 @@ class SimpleLocalRoleProvider(object):
         yield ('bogus_user', ('Foo',))
 
 
-class DummyUser(object):
+class DummyUser(Implicit):
     def __init__(self, uid, group_ids=()):
         self.id = uid
         self._groups = group_ids
@@ -48,6 +55,21 @@ class DummyUser(object):
 
     def getRoles(self):
         return ()
+
+class FauxGroupsPlugin(BasePlugin):
+    implements(IGroupsPlugin)
+
+    def getGroupsForPrincipal(self, principal, request=None):
+        return principal._groups
+
+class TotalFauxPAS(FauxPAS):
+    
+    def __init__(self):
+        self._id = 'acl_users'
+        # Add a minimal PluginRegistry with a mock IGroupsPlugin, because the roles plugin depends on it:
+        self._setObject('plugins', PluginRegistry(_PLUGIN_TYPE_INFO))
+        self._setObject('groups', FauxGroupsPlugin())
+        self['plugins'].activatePlugin(IGroupsPlugin, 'groups')
 
 @onsetup
 def setup_package():

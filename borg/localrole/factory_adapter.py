@@ -13,9 +13,12 @@ class FactoryTempFolderProvider(object):
         >>> placeless.setUp()
         >>> from zope.component import provideAdapter
         >>> from zope.interface import Interface, implements, directlyProvides
-        >>> from borg.localrole.workspace import WorkspaceLocalRoleManager
-        >>> rm = WorkspaceLocalRoleManager('rm', 'A Role Manager')
-
+        >>> from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
+        >>> from borg.localrole.tests import TotalFauxPAS
+        >>> acl = TotalFauxPAS()
+        >>> manage_addWorkspaceLocalRoleManager(acl, 'rm', 'A Role Manager')
+        >>> rm = acl['rm']
+        
         >>> from Acquisition import Implicit
         >>> class DummyObject(Implicit):
         ...     implements(Interface)
