@@ -404,7 +404,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         principals: the user and all groups that they belong
         to."""
         plugins = aq_parent(aq_inner(self))['plugins']
-        principal_ids = getGroupsForPrincipal(user, plugins)
+        principal_ids = getGroupsForPrincipal(user, plugins, self.REQUEST)
         principal_ids.insert(0, user.getId())
         return principal_ids
 
