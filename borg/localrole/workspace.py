@@ -6,12 +6,9 @@ from zope.component import getAdapters
 from zope.annotation.interfaces import IAnnotations
 from plone.memoize.volatile import cache, DontCache
 
-from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluginRegistry.PluginRegistry import PluginRegistry
 from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
-from Products.PlonePAS.utils import getGroupsForPrincipal
 
 from borg.localrole.interfaces import ILocalRoleProvider
 
@@ -52,10 +49,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
           >>> from borg.localrole.tests import DummyUser
           >>> john = DummyUser('john')
 
-          >>> from borg.localrole.tests import TotalFauxPAS
-          >>> acl = TotalFauxPAS()
-          >>> manage_addWorkspaceLocalRoleManager(acl, 'rm', 'A Role Manager')
-          >>> rm = acl['rm']
+          >>> rm = WorkspaceLocalRoleManager('rm', 'A Role Manager')
           >>> fun = rm.__class__.checkLocalRolesAllowed
 
         The dummy object doesn't have an acquired request, so no caching
@@ -168,10 +162,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
     make sure they can access objects which require that role, but not
     others::
 
-        >>> from borg.localrole.tests import TotalFauxPAS
-        >>> acl = TotalFauxPAS()
-        >>> manage_addWorkspaceLocalRoleManager(acl, 'rm', 'A Role Manager')
-        >>> rm = acl['rm']
+        >>> rm = WorkspaceLocalRoleManager('rm', 'A Role Manager')
         >>> rm.getRolesInContext(user1, ob)
         ['Foo']
         >>> rm.checkLocalRolesAllowed(user1, ob, ['Bar', 'Foo', 'Baz'])
@@ -403,8 +394,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         """Returns a list of the ids of all involved security
         principals: the user and all groups that they belong
         to."""
-        plugins = aq_parent(aq_inner(self))['plugins']
-        principal_ids = getGroupsForPrincipal(user, plugins, self.REQUEST)
+        principal_ids = list(user.getGroups())
         principal_ids.insert(0, user.getId())
         return principal_ids
 
