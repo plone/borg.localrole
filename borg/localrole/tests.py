@@ -1,16 +1,12 @@
-import unittest
 import doctest
+import unittest
 
 from zope.interface import implements
-import zope.testing.doctest
-
 from Products.Five import zcml
 from Products.Five import fiveconfigure
-
-from Testing import ZopeTestCase as ztc
-
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
+from Testing import ZopeTestCase as ztc
 
 import borg.localrole
 from borg.localrole import factory_adapter
@@ -24,12 +20,12 @@ class SimpleLocalRoleProvider(object):
 
     def getRoles(self, user):
         """Grant everyone the 'Foo' role"""
-        return ('Foo',)
+        return ('Foo', )
 
     def getAllRoles(self):
         """In the real world we would enumerate all users and
         grant the 'Foo' role to each, but we won't"""
-        yield ('bogus_user', ('Foo',))
+        yield ('bogus_user', ('Foo', ))
 
 
 class DummyUser(object):
@@ -49,6 +45,7 @@ class DummyUser(object):
     def getRoles(self):
         return ()
 
+
 @onsetup
 def setup_package():
     fiveconfigure.debug_mode = True
@@ -62,6 +59,7 @@ setup_package()
 ptc.setupPloneSite(extension_profiles=(
     'borg.localrole:default',
 ))
+
 
 def test_suite():
     suite = []
@@ -80,20 +78,13 @@ def test_suite():
         ])
 
     # Add the tests that register adapters at the end
-
     suite.extend([
-        zope.testing.doctest.DocTestSuite(borg.localrole.workspace,
+        doctest.DocTestSuite(borg.localrole.workspace,
             setUp=ztc.placeless.setUp(),
             tearDown=ztc.placeless.tearDown(),
-            optionflags=zope.testing.doctest.ELLIPSIS |
-                        zope.testing.doctest.NORMALIZE_WHITESPACE),
-
-        zope.testing.doctest.DocTestSuite(factory_adapter),
-        zope.testing.doctest.DocTestSuite(default_adapter),
+            optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
+        doctest.DocTestSuite(factory_adapter),
+        doctest.DocTestSuite(default_adapter),
         ])
 
-
     return unittest.TestSuite(suite)
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
