@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0.1 - unreleased
+3.0.1 - 2010-07-18
 ------------------
 
 - Avoid raising deprecation warnings about our own code.
