@@ -70,11 +70,6 @@ def test_suite():
                     test_class=ptc.FunctionalTestCase,
                     optionflags=(doctest.ELLIPSIS |
                                  doctest.NORMALIZE_WHITESPACE)),
-        ztc.ZopeDocFileSuite(
-                    'bbb.txt', package='borg.localrole.bbb',
-                    test_class=ptc.FunctionalTestCase,
-                    optionflags=(doctest.ELLIPSIS |
-                                 doctest.NORMALIZE_WHITESPACE)),
         ])
 
     # Add the tests that register adapters at the end

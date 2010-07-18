@@ -1,18 +1,18 @@
+from plone.memoize.volatile import cache, DontCache
+from zope.annotation.interfaces import IAnnotations
+from zope.component import getAdapters
+
 from App.class_init import InitializeClass
 from Acquisition import aq_inner, aq_parent, aq_get
 from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from zope.component import getAdapters
-from zope.annotation.interfaces import IAnnotations
-from plone.memoize.volatile import cache, DontCache
-
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
 
 from borg.localrole.interfaces import ILocalRoleProvider
 
-# XXX: BBB interfaces, to be removed
+# BBB interfaces, to be removed
 from borg.localrole.bbb.interfaces import IWorkspace
 from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
 

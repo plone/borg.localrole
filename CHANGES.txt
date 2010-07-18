@@ -4,6 +4,9 @@ Changelog
 3.0.1 - unreleased
 ------------------
 
+- Avoid raising deprecation warnings about our own code.
+  [hannosch]
+
 - Use the standard libraries doctest module.
   [hannosch]
 

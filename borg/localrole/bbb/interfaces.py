@@ -1,7 +1,8 @@
 from zope.interface import Interface
 
-# XXX: These interfaces will be removed in a later version of borg.locarole.
+# BBB: These interfaces will be removed in a later version of borg.locarole.
 # You should use the interfaces in borg.localrole.interfaces instead!
+
 
 class IWorkspace(Interface):
     """A workspace in which custom local roles are needed
@@ -19,6 +20,7 @@ class IWorkspace(Interface):
         """Return a dictonary mapping principals to their roles within
         a workspace.
         """
+
 
 class IGroupAwareWorkspace(IWorkspace):
     """A group-aware version of IWorkspace.
