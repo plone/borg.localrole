@@ -3,7 +3,8 @@ Changelog
 
 3.0.2 - unreleased
 ------------------
-
+- Close <input> tags properly (chameleon compatibility)
+  [swampmonkey]
 
 3.0.1 - 2010-07-18
 ------------------
