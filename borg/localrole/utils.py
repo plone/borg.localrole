@@ -12,7 +12,7 @@ def setup_localrole_plugin(portal):
     """Install and prioritize the local-role PAS plug-in
     """
     out = StringIO()
-    
+
     uf = getToolByName(portal, 'acl_users')
 
     existing = uf.objectIds()
@@ -22,7 +22,7 @@ def setup_localrole_plugin(portal):
         activatePluginInterfaces(portal, LOCALROLE_PLUGIN_NAME, out)
     else:
         print >> out, "%s already installed" % LOCALROLE_PLUGIN_NAME
-        
+
     return out.getvalue()
 
 def replace_local_role_manager(portal):

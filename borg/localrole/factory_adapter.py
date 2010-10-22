@@ -25,7 +25,7 @@ class FactoryTempFolderProvider(object):
     Let's construct a hierarchy similar to the way portal factory is used::
 
         root --> folder -------|
-          |------------> PortalFactory --> TempFolder --> NewObject 
+          |------------> PortalFactory --> TempFolder --> NewObject
 
         >>> fold = DummyObject().__of__(root)
         >>> factory = DummyObject().__of__(root)

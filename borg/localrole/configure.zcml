@@ -6,7 +6,7 @@
     i18n_domain="borg.localrole">
 
     <five:registerPackage package="." initialize=".initialize" />
-    
+
     <!-- Register GenericSetup profile used for installation -->
     <genericsetup:registerProfile
         name="default"
@@ -21,7 +21,7 @@
            zcml:condition="installed Products.CMFPlone">
       <implements interface=".interfaces.IFactoryTempFolder" />
     </class>
-    
+
     <adapter zcml:condition="installed Products.CMFPlone"
              factory=".factory_adapter.FactoryTempFolderProvider"
              />

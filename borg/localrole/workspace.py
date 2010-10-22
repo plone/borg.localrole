@@ -483,7 +483,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
                     rolemap.update(workspace.getLocalRoles())
 
         return rolemap
-               
+
     # XXX: for BBB only
 
     security.declarePrivate("_groups")
