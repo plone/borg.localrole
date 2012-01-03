@@ -1,0 +1,5 @@
+include *
+
+recursive-include borg *
+
+global-exclude *pyc
