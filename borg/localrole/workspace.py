@@ -380,13 +380,16 @@ class WorkspaceLocalRoleManager(BasePlugin):
         return (a[1] for a in adapters)
 
     def _parent_chain(self, obj):
-        """Iterate over the containment chain, stopping if we hit a
+        """Iterate over the acquisition chain, stopping if we hit a
         local role blocker"""
         while obj is not None:
             yield obj
             if getattr(obj, '__ac_local_roles_block__', None):
                 raise StopIteration
-            new = aq_parent(aq_inner(obj))
+            # avoid using the module global ``aq_parent`` function
+            # here because we want to iterate over the acquisition
+            # chain, not the containment chain.
+            new = getattr(aq_inner(obj), "aq_parent", None)
             # if the obj is a method we get the class
             obj = getattr(obj, 'im_self', new)
 

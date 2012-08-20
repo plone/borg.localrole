@@ -4,6 +4,13 @@ Changelog for borg.localrole
 
 borg.localrole - 2.0.2 Unreleased
 
+    - Iterate through acquisition chain instead of containment chain
+      when checking for local roles.
+
+      This fixes an issue where an non-contained acquirer (such as a
+      default skin template) will short-circuit the check for local
+      roles.
+      [malthe]
 
 borg.localrole - 2.0.1 Released July 31st, 2008
 
