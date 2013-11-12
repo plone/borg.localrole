@@ -4,6 +4,8 @@ Changelog
 3.0.3 - unreleased
 ------------------
 
+- Moved portal_factory stuff to Products.ATContentTypes for PLIP #13770
+  [ale-rt]
 
 3.0.2 - 2010-10-27
 ------------------
