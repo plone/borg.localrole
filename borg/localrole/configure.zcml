@@ -17,12 +17,12 @@
         />
 
     <!-- Installs the Factory Tool adapter if Plone is installed -->
-    <class class="Products.CMFPlone.TempFolder.TempFolder"
-           zcml:condition="installed Products.CMFPlone">
+    <class class="Products.ATContentTypes.tool.factory.TempFolder"
+           zcml:condition="installed Products.ATContentTypes">
       <implements interface=".interfaces.IFactoryTempFolder" />
     </class>
 
-    <adapter zcml:condition="installed Products.CMFPlone"
+    <adapter zcml:condition="installed Products.ATContentTypes"
              factory=".factory_adapter.FactoryTempFolderProvider"
              />
 
