@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 name = 'borg.localrole'
-version = '3.1'
+version = '3.1.1.dev0'
 
 readme = open('README.txt').read()
 history = open('CHANGES.txt').read()
