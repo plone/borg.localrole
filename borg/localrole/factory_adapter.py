@@ -5,6 +5,7 @@ from borg.localrole.interfaces import ILocalRoleProvider
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 
+
 class FactoryTempFolderProvider(object):
     """A simple local role provider which just gathers the roles from
     the desired context::

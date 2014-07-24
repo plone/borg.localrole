@@ -13,6 +13,7 @@ from borg.localrole import default_adapter
 
 class SimpleLocalRoleProvider(object):
     implements(borg.localrole.interfaces.ILocalRoleProvider)
+
     def __init__(self, context):
         self.context = context
 

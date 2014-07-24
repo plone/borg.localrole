@@ -3,11 +3,11 @@ from zope.interface import Interface
 
 deprecated(
   "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
-  IWorkspace = 'borg.localrole.bbb.interfaces:IWorkspace')
+  IWorkspace='borg.localrole.bbb.interfaces:IWorkspace')
 
 deprecated(
   "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
-  IGroupAwareWorkspace = 'borg.localrole.bbb.interfaces:IGroupAwareWorkspace')
+  IGroupAwareWorkspace='borg.localrole.bbb.interfaces:IGroupAwareWorkspace')
 
 
 class ILocalRoleProvider(Interface):
