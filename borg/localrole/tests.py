@@ -2,10 +2,8 @@ import doctest
 import unittest
 
 from zope.interface import implements
-from Products.Five import zcml
-from Products.Five import fiveconfigure
-from Products.PloneTestCase import PloneTestCase as ptc
-from Products.PloneTestCase.layer import onsetup
+from plone.testing import layered
+from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
 from Testing import ZopeTestCase as ztc
 
 import borg.localrole
@@ -46,40 +44,20 @@ class DummyUser(object):
         return ()
 
 
-@onsetup
-def setup_package():
-    fiveconfigure.debug_mode = True
-    zcml.load_config('configure.zcml', borg.localrole)
-    fiveconfigure.debug_mode = False
-
-    ztc.installPackage('borg.localrole')
-
-
-setup_package()
-ptc.setupPloneSite(extension_profiles=(
-    'borg.localrole:default',
-))
-
-
 def test_suite():
-    suite = []
-
-    suite.extend([
-        ztc.ZopeDocFileSuite(
+    suite = [
+        layered(doctest.DocFileSuite(
                     'README.txt', package='borg.localrole',
-                    test_class=ptc.FunctionalTestCase,
                     optionflags=(doctest.ELLIPSIS |
                                  doctest.NORMALIZE_WHITESPACE)),
-        ])
-
+                layer=PTC_FUNCTIONAL_TESTING),
     # Add the tests that register adapters at the end
-    suite.extend([
         doctest.DocTestSuite(borg.localrole.workspace,
             setUp=ztc.placeless.setUp(),
             tearDown=ztc.placeless.tearDown(),
             optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
         doctest.DocTestSuite(factory_adapter),
         doctest.DocTestSuite(default_adapter),
-        ])
+        ]
 
     return unittest.TestSuite(suite)
