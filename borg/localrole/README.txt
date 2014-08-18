@@ -11,5 +11,5 @@ by adapter. It can be installed via the GenericSetup_ profile in this product.
 The plug-in should be installed when this doc-test is run. Please see
 ``workspace.py`` for more comprehensive tests.
 
-    >>> 'borg_localroles' in self.portal.acl_users.objectIds()
+    >>> 'borg_localroles' in layer['portal'].acl_users
     True

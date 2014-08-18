@@ -24,7 +24,7 @@ setup(name = name,
       extras_require=dict(
         test=[
             'Products.ATContentTypes',
-            'Products.PloneTestCase',
+            'plone.app.testing',
         ]
       ),
       install_requires=[
@@ -45,11 +45,13 @@ setup(name = name,
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Plone',
+        'Framework :: Plone :: 5.0',
         'Intended Audience :: Other Audience',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
       ],
 )

@@ -20,6 +20,7 @@ manage_addWorkspaceLocalRoleManagerForm = PageTemplateFile(
         "zmi/WorkspaceLocalRoleManagerForm.pt", globals(),
         __name__="manage_addWorkspaceRoleManagerForm")
 
+
 def manage_addWorkspaceLocalRoleManager(dispatcher, id, title=None, REQUEST=None):
     """Add a WorkspaceLocalRoleManager to a Pluggable Authentication Services."""
     wlrm = WorkspaceLocalRoleManager(id, title)
@@ -124,6 +125,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
     except AttributeError:
         oid = id(obj)
     return (user.getId(), oid, tuple(object_roles))
+
 
 def store_on_request(method, self, user, obj, object_roles):
     """ helper for caching local roles on the request """
@@ -351,7 +353,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
     """
     meta_type = "Workspace Roles Manager"
-    security  = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     def __init__(self, id, title=""):
         self.id = id
@@ -374,7 +376,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
     #
 
     def _getAdapters(self, obj):
-        adapters = getAdapters((obj,), ILocalRoleProvider)
+        adapters = getAdapters((obj, ), ILocalRoleProvider)
         # this is sequence of tuples of the form (name, adapter),
         # we don't really care about the names
         return (a[1] for a in adapters)
@@ -399,6 +401,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         return principal_ids
 
     security.declarePrivate("getRolesInContext")
+
     def getRolesInContext(self, user, object):
         # we combine the permission of the user with those of the
         # groups she belongs to
@@ -426,6 +429,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         return list(roles)
 
     security.declarePrivate("checkLocalRolesAllowed")
+
     @cache(get_key=clra_cache_key, get_cache=store_on_request)
     def checkLocalRolesAllowed(self, user, object, object_roles):
         """Checks if the user has one of the specified roles in the
@@ -470,6 +474,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         return None
 
     security.declarePrivate("getAllLocalRolesInContext")
+
     def getAllLocalRolesInContext(self, object):
         rolemap = {}
         for obj in self._parent_chain(object):
@@ -477,16 +482,16 @@ class WorkspaceLocalRoleManager(BasePlugin):
                 iter_roles = a.getAllRoles()
                 for principal, roles in iter_roles:
                     rolemap.setdefault(principal, set()).update(roles)
-            else: # XXX: BBB code, kicks in only if there's no proper ddapter
+            else:  # XXX: BBB code, kicks in only if there's no proper ddapter
                 workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
                 if workspace is not None:
                     rolemap.update(workspace.getLocalRoles())
 
         return rolemap
-
     # XXX: for BBB only
 
     security.declarePrivate("_groups")
+
     def _groups(self, obj, user, workspace):
         """If workspace provides IGroupAwareWorkspace and the user has
         a getGroups() method, yield each group_id returned by that method.

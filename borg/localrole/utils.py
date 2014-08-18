@@ -8,6 +8,7 @@ from Products.PlonePAS.plugins.local_role import LocalRolesManager
 from borg.localrole.config import LOCALROLE_PLUGIN_NAME
 from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
 
+
 def setup_localrole_plugin(portal):
     """Install and prioritize the local-role PAS plug-in
     """
@@ -24,6 +25,7 @@ def setup_localrole_plugin(portal):
         print >> out, "%s already installed" % LOCALROLE_PLUGIN_NAME
 
     return out.getvalue()
+
 
 def replace_local_role_manager(portal):
     """Installs the borg local role manager in place of the standard one from
