@@ -123,7 +123,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
     try:
         oid = obj.getPhysicalPath()
     except AttributeError:
-        raise DontCache
+        oid = id(obj)
     return (user.getId(), oid, tuple(object_roles))
 
 
