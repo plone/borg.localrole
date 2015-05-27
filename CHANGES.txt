@@ -4,7 +4,8 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Don't use id(obj) in cache keys
+  [gaudenz]
 
 
 3.1.1 (2014-10-23)
