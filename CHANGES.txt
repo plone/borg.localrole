@@ -4,7 +4,7 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
-- Don't use id(obj) in cache keys
+- Don't use id(obj) in cache keys, fixes https://dev.plone.org/ticket/9915
   [gaudenz]
 
 
