@@ -18,12 +18,17 @@ The script accepts buildout command-line options, so you can
 use the -c option to specify an alternate configuration file.
 """
 
+from optparse import OptionParser
+
 import os
+import pkg_resources
+import setuptools
 import shutil
+import subprocess
 import sys
 import tempfile
+import zc.buildout.buildout
 
-from optparse import OptionParser
 
 tmpeggs = tempfile.mkdtemp()
 
@@ -35,7 +40,7 @@ Bootstraps a buildout-based project.
 Simply run this script in a directory containing a buildout.cfg, using the
 Python that you want bin/buildout to use.
 
-Note that by using --find-links to point to local resources, you can keep 
+Note that by using --find-links to point to local resources, you can keep
 this script from going over the network.
 '''
 
@@ -79,10 +84,10 @@ exec(urlopen('https://bootstrap.pypa.io/ez_setup.py').read(), ez)
 
 if not options.allow_site_packages:
     # ez_setup imports site, which adds site packages
-    # this will remove them from the path to ensure that incompatible versions 
+    # this will remove them from the path to ensure that incompatible versions
     # of setuptools are not in the path
     import site
-    # inside a virtualenv, there is no 'getsitepackages'. 
+    # inside a virtualenv, there is no 'getsitepackages'.
     # We can't remove these reliably
     if hasattr(site, 'getsitepackages'):
         for sitepackage_path in site.getsitepackages():
@@ -90,8 +95,6 @@ if not options.allow_site_packages:
 
 setup_args = dict(to_dir=tmpeggs, download_delay=0)
 ez['use_setuptools'](**setup_args)
-import setuptools
-import pkg_resources
 
 # This does not (always?) update the default working set.  We will
 # do it.
@@ -113,7 +116,7 @@ find_links = os.environ.get(
     options.find_links or
     ('http://downloads.buildout.org/'
      if options.accept_buildout_test_releases else None)
-    )
+)
 if find_links:
     cmd.extend(['-f', find_links])
 
@@ -155,7 +158,6 @@ if version:
     requirement = '=='.join((requirement, version))
 cmd.append(requirement)
 
-import subprocess
 if subprocess.call(cmd, env=dict(os.environ, PYTHONPATH=setuptools_path)) != 0:
     raise Exception(
         "Failed to execute command:\n%s" % repr(cmd)[1:-1])
@@ -165,7 +167,6 @@ if subprocess.call(cmd, env=dict(os.environ, PYTHONPATH=setuptools_path)) != 0:
 
 ws.add_entry(tmpeggs)
 ws.require(requirement)
-import zc.buildout.buildout
 
 if not [a for a in args if '=' not in a]:
     args.append('bootstrap')

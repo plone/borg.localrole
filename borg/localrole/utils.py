@@ -1,21 +1,18 @@
-from StringIO import StringIO
-
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
+from borg.localrole.config import LOCALROLE_PLUGIN_NAME
+from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
 from Products.CMFCore.utils import getToolByName
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 from Products.PlonePAS.plugins.local_role import LocalRolesManager
-
-from borg.localrole.config import LOCALROLE_PLUGIN_NAME
-from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
+from StringIO import StringIO
 
 
 def setup_localrole_plugin(portal):
     """Install and prioritize the local-role PAS plug-in
     """
     out = StringIO()
-
     uf = getToolByName(portal, 'acl_users')
-
     existing = uf.objectIds()
 
     if LOCALROLE_PLUGIN_NAME not in existing:

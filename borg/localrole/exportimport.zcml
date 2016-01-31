@@ -1,18 +1,15 @@
 <configure xmlns="http://namespaces.zope.org/zope">
-
   <!-- XXX should probably define an IWorkspaceLocalRolesPlugin
            interface in the next release instead of using the class as
            the 'for' value -->
-
   <adapter
-     factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
-     provides="Products.GenericSetup.interfaces.IFilesystemExporter"
-     for="borg.localrole.workspace.WorkspaceLocalRoleManager" />
-
+      factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
+      for="borg.localrole.workspace.WorkspaceLocalRoleManager"
+      provides="Products.GenericSetup.interfaces.IFilesystemExporter"
+  />
   <adapter
-     factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
-     provides="Products.GenericSetup.interfaces.IFilesystemImporter"
-     for="borg.localrole.workspace.WorkspaceLocalRoleManager"
-     />
-
+      factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
+      for="borg.localrole.workspace.WorkspaceLocalRoleManager"
+      provides="Products.GenericSetup.interfaces.IFilesystemImporter"
+  />
 </configure>

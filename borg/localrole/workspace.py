@@ -1,35 +1,47 @@
-from plone.memoize.volatile import cache, DontCache
+# -*- coding: utf-8 -*-
+from AccessControl import ClassSecurityInfo
+from Acquisition import aq_get
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from App.class_init import InitializeClass
+from borg.localrole.interfaces import ILocalRoleProvider
+from plone.memoize.volatile import cache
+from plone.memoize.volatile import DontCache
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapters
-
-from App.class_init import InitializeClass
-from Acquisition import aq_inner, aq_parent, aq_get
-from AccessControl import ClassSecurityInfo
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
-
-from borg.localrole.interfaces import ILocalRoleProvider
+from zope.interface import implementer
 
 # BBB interfaces, to be removed
-from borg.localrole.bbb.interfaces import IWorkspace
 from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
+from borg.localrole.bbb.interfaces import IWorkspace
 
 manage_addWorkspaceLocalRoleManagerForm = PageTemplateFile(
-        "zmi/WorkspaceLocalRoleManagerForm.pt", globals(),
-        __name__="manage_addWorkspaceRoleManagerForm")
+    "zmi/WorkspaceLocalRoleManagerForm.pt",
+    globals(),
+    __name__="manage_addWorkspaceRoleManagerForm"
+)
 
 
-def manage_addWorkspaceLocalRoleManager(dispatcher, id, title=None, REQUEST=None):
-    """Add a WorkspaceLocalRoleManager to a Pluggable Authentication Services."""
+def manage_addWorkspaceLocalRoleManager(
+    dispatcher,
+    id,
+    title=None,
+    REQUEST=None
+):
+    """Add a WorkspaceLocalRoleManager to a Pluggable Authentication Services.
+    """
     wlrm = WorkspaceLocalRoleManager(id, title)
     dispatcher._setObject(wlrm.getId(), wlrm)
 
     if REQUEST is not None:
         REQUEST.RESPONSE.redirect(
-                '%s/manage_workspace?manage_tabs_message=WorkspaceLocalRoleManager+added.'
-                % dispatcher.absolute_url())
+            '%s/manage_workspace?'
+            'manage_tabs_message=WorkspaceLocalRoleManager+added.'
+            % dispatcher.absolute_url()
+        )
 
 
 # memoize support for `checkLocalRolesAllowed`
@@ -108,7 +120,8 @@ def clra_cache_key(method, self, user, obj, object_roles):
           checkLocalRolesAllowed called...
           None
           >>> IAnnotations(request)
-          {"borg.localrole.workspace.checkLocalRolesAllowed:('john', '42!', ('foo', 'bar'))": None}
+          {"borg.localrole.workspace.checkLocalRolesAllowed:('john', '42!',
+          ('foo', 'bar'))": None}
 
         Calling the method a second time should directly return the cached
         value, i.e. the logger shouldn't print anything:
@@ -132,6 +145,7 @@ def store_on_request(method, self, user, obj, object_roles):
     return IAnnotations(aq_get(obj, 'REQUEST'))
 
 
+@implementer(ILocalRolesPlugin)
 class WorkspaceLocalRoleManager(BasePlugin):
     """This is the actual plug-in. It takes care of looking up
     ILocalRolesProvider adapters (when available) and granting local roles
@@ -400,8 +414,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         principal_ids.insert(0, user.getId())
         return principal_ids
 
-    security.declarePrivate("getRolesInContext")
-
+    @security.private
     def getRolesInContext(self, user, object):
         # we combine the permission of the user with those of the
         # groups she belongs to
@@ -421,15 +434,16 @@ class WorkspaceLocalRoleManager(BasePlugin):
                         roles.update(a.getRoles(pid))
                 # XXX: BBB code, kicks in only if there's no proper adapter
                 if count == -1:
-                    workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
+                    workspace = IGroupAwareWorkspace(
+                        obj, IWorkspace(obj, None))
                     if workspace is not None:
                         roles.update(workspace.getLocalRolesForPrincipal(user))
                         for group in self._groups(obj, user, workspace):
-                            roles.update(workspace.getLocalRolesForPrincipal(group))
+                            roles.update(
+                                workspace.getLocalRolesForPrincipal(group))
         return list(roles)
 
-    security.declarePrivate("checkLocalRolesAllowed")
-
+    @security.private
     @cache(get_key=clra_cache_key, get_cache=store_on_request)
     def checkLocalRolesAllowed(self, user, object, object_roles):
         """Checks if the user has one of the specified roles in the
@@ -473,8 +487,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
         return None
 
-    security.declarePrivate("getAllLocalRolesInContext")
-
+    @security.private
     def getAllLocalRolesInContext(self, object):
         rolemap = {}
         for obj in self._parent_chain(object):
@@ -488,10 +501,9 @@ class WorkspaceLocalRoleManager(BasePlugin):
                     rolemap.update(workspace.getLocalRoles())
 
         return rolemap
+
     # XXX: for BBB only
-
-    security.declarePrivate("_groups")
-
+    @security.private
     def _groups(self, obj, user, workspace):
         """If workspace provides IGroupAwareWorkspace and the user has
         a getGroups() method, yield each group_id returned by that method.
@@ -503,5 +515,4 @@ class WorkspaceLocalRoleManager(BasePlugin):
                 for group_id in getGroups():
                     yield acl_users.getGroupById(group_id)
 
-classImplements(WorkspaceLocalRoleManager, ILocalRolesPlugin)
 InitializeClass(WorkspaceLocalRoleManager)

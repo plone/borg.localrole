@@ -1,18 +1,18 @@
+# -*- coding: utf-8 -*-
+from borg.localrole import default_adapter
+from borg.localrole import factory_adapter
+from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
+from plone.testing import layered
+from Testing import ZopeTestCase as ztc
+from zope.interface import implementer
+
+import borg.localrole
 import doctest
 import unittest
 
-from zope.interface import implements
-from plone.testing import layered
-from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
-from Testing import ZopeTestCase as ztc
 
-import borg.localrole
-from borg.localrole import factory_adapter
-from borg.localrole import default_adapter
-
-
+@implementer(borg.localrole.interfaces.ILocalRoleProvider)
 class SimpleLocalRoleProvider(object):
-    implements(borg.localrole.interfaces.ILocalRoleProvider)
 
     def __init__(self, context):
         self.context = context
@@ -28,6 +28,7 @@ class SimpleLocalRoleProvider(object):
 
 
 class DummyUser(object):
+
     def __init__(self, uid, group_ids=()):
         self.id = uid
         self._groups = group_ids
@@ -47,18 +48,23 @@ class DummyUser(object):
 
 def test_suite():
     suite = [
-        layered(doctest.DocFileSuite(
-                    'README.txt', package='borg.localrole',
-                    optionflags=(doctest.ELLIPSIS |
-                                 doctest.NORMALIZE_WHITESPACE)),
-                layer=PTC_FUNCTIONAL_TESTING),
-    # Add the tests that register adapters at the end
-        doctest.DocTestSuite(borg.localrole.workspace,
+        layered(
+            doctest.DocFileSuite(
+                'README.txt',
+                package='borg.localrole',
+                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+            ),
+            layer=PTC_FUNCTIONAL_TESTING
+        ),
+        # Add the tests that register adapters at the end
+        doctest.DocTestSuite(
+            borg.localrole.workspace,
             setUp=ztc.placeless.setUp(),
             tearDown=ztc.placeless.tearDown(),
-            optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
+            optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE
+        ),
         doctest.DocTestSuite(factory_adapter),
         doctest.DocTestSuite(default_adapter),
-        ]
+    ]
 
     return unittest.TestSuite(suite)
