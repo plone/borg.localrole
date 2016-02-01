@@ -27,8 +27,7 @@ setup(
     zip_safe=False,
     extras_require=dict(
         test=[
-            'Products.ATContentTypes',
-            'plone.app.testing',
+            'plone.testing',
         ]
     ),
     install_requires=[
@@ -41,6 +40,7 @@ setup(
         'setuptools',
         'zope.annotation',
         'zope.component',
+        'zope.deprecation',
         'zope.deferredimport',
         'zope.interface',
         'Zope2',
@@ -52,7 +52,10 @@ setup(
         'Framework :: Plone :: 5.0',
         'Intended Audience :: Other Audience',
         'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+        (
+            'License :: OSI Approved :: GNU Library or Lesser General Public '
+            'License (LGPL)'
+        ),
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',

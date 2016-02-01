@@ -19,8 +19,7 @@ def setup_localrole_plugin(portal):
         manage_addWorkspaceLocalRoleManager(uf, LOCALROLE_PLUGIN_NAME)
         activatePluginInterfaces(portal, LOCALROLE_PLUGIN_NAME, out)
     else:
-        print >> out, "%s already installed" % LOCALROLE_PLUGIN_NAME
-
+        out.write('{0} already installed'.format(LOCALROLE_PLUGIN_NAME))
     return out.getvalue()
 
 
@@ -29,7 +28,7 @@ def replace_local_role_manager(portal):
     PlonePAS"""
     uf = getToolByName(portal, 'acl_users', None)
     # Make sure we have a PAS user folder
-    if uf is not None and hasattr(aq_base(uf), 'plugins'):
+    if uf is not None and 'plugins' in aq_base(uf):
         # Remove the original plugin if it's there
         if 'local_roles' in uf.objectIds():
             orig_lr = getattr(uf, 'local_roles')

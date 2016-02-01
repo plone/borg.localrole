@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from borg.localrole import default_adapter
-from borg.localrole import factory_adapter
-from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
+from Acquisition import Implicit
+from borg.localrole.testing import BORGLOCALROLE_ZOPE_FIXTURE
 from plone.testing import layered
-from Testing import ZopeTestCase as ztc
 from zope.interface import implementer
 
 import borg.localrole
@@ -46,25 +44,39 @@ class DummyUser(object):
         return ()
 
 
+class DummyObject(Implicit):
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<DummyObject {0}>'.format(self.name)
+
+
+optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+optionflags = optionflags | doctest.REPORT_ONLY_FIRST_FAILURE
+
+TESTFILES = [
+    ('workspace.rst', BORGLOCALROLE_ZOPE_FIXTURE),
+    ('default_adapter.rst', BORGLOCALROLE_ZOPE_FIXTURE),
+    ('factory_adapter.rst', BORGLOCALROLE_ZOPE_FIXTURE),
+]
+
+
 def test_suite():
-    suite = [
+    suite = unittest.TestSuite()
+    suite.addTests([
         layered(
             doctest.DocFileSuite(
-                'README.txt',
-                package='borg.localrole',
-                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+                docfile,
+                globs={
+                    'DummyObject': DummyObject,
+                    'DummyUser': DummyUser,
+                    'SimpleLocalRoleProvider': SimpleLocalRoleProvider,
+                },
+                optionflags=optionflags,
             ),
-            layer=PTC_FUNCTIONAL_TESTING
-        ),
-        # Add the tests that register adapters at the end
-        doctest.DocTestSuite(
-            borg.localrole.workspace,
-            setUp=ztc.placeless.setUp(),
-            tearDown=ztc.placeless.tearDown(),
-            optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE
-        ),
-        doctest.DocTestSuite(factory_adapter),
-        doctest.DocTestSuite(default_adapter),
-    ]
-
-    return unittest.TestSuite(suite)
+            layer=layer,
+        ) for docfile, layer in TESTFILES
+    ])
+    return suite
