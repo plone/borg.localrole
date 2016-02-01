@@ -1,18 +1,16 @@
+# -*- coding: utf-8 -*-
+from Acquisition import Implicit
+from borg.localrole.testing import BORGLOCALROLE_ZOPE_FIXTURE
+from plone.testing import layered
+from zope.interface import implementer
+
+import borg.localrole
 import doctest
 import unittest
 
-from zope.interface import implements
-from plone.testing import layered
-from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
-from Testing import ZopeTestCase as ztc
 
-import borg.localrole
-from borg.localrole import factory_adapter
-from borg.localrole import default_adapter
-
-
+@implementer(borg.localrole.interfaces.ILocalRoleProvider)
 class SimpleLocalRoleProvider(object):
-    implements(borg.localrole.interfaces.ILocalRoleProvider)
 
     def __init__(self, context):
         self.context = context
@@ -28,6 +26,7 @@ class SimpleLocalRoleProvider(object):
 
 
 class DummyUser(object):
+
     def __init__(self, uid, group_ids=()):
         self.id = uid
         self._groups = group_ids
@@ -45,20 +44,39 @@ class DummyUser(object):
         return ()
 
 
-def test_suite():
-    suite = [
-        layered(doctest.DocFileSuite(
-                    'README.txt', package='borg.localrole',
-                    optionflags=(doctest.ELLIPSIS |
-                                 doctest.NORMALIZE_WHITESPACE)),
-                layer=PTC_FUNCTIONAL_TESTING),
-    # Add the tests that register adapters at the end
-        doctest.DocTestSuite(borg.localrole.workspace,
-            setUp=ztc.placeless.setUp(),
-            tearDown=ztc.placeless.tearDown(),
-            optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
-        doctest.DocTestSuite(factory_adapter),
-        doctest.DocTestSuite(default_adapter),
-        ]
+class DummyObject(Implicit):
 
-    return unittest.TestSuite(suite)
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<DummyObject {0}>'.format(self.name)
+
+
+optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+optionflags = optionflags | doctest.REPORT_ONLY_FIRST_FAILURE
+
+TESTFILES = [
+    ('workspace.rst', BORGLOCALROLE_ZOPE_FIXTURE),
+    ('default_adapter.rst', BORGLOCALROLE_ZOPE_FIXTURE),
+    ('factory_adapter.rst', BORGLOCALROLE_ZOPE_FIXTURE),
+]
+
+
+def test_suite():
+    suite = unittest.TestSuite()
+    suite.addTests([
+        layered(
+            doctest.DocFileSuite(
+                docfile,
+                globs={
+                    'DummyObject': DummyObject,
+                    'DummyUser': DummyUser,
+                    'SimpleLocalRoleProvider': SimpleLocalRoleProvider,
+                },
+                optionflags=optionflags,
+            ),
+            layer=layer,
+        ) for docfile, layer in TESTFILES
+    ])
+    return suite

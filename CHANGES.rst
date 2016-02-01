@@ -4,7 +4,8 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- PEP8, UTF8 headers, sorted imports, security decorators, and other cleanup.
+  [jensens]
 
 
 3.1.1 (2014-10-23)

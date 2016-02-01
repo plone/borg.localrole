@@ -11,3 +11,6 @@ dist
 /develop-eggs
 /parts
 *.bak
+/lib/
+/local/
+/include/

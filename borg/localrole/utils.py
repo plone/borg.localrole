@@ -1,29 +1,25 @@
-from StringIO import StringIO
-
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
+from borg.localrole.config import LOCALROLE_PLUGIN_NAME
+from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
 from Products.CMFCore.utils import getToolByName
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 from Products.PlonePAS.plugins.local_role import LocalRolesManager
-
-from borg.localrole.config import LOCALROLE_PLUGIN_NAME
-from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
+from StringIO import StringIO
 
 
 def setup_localrole_plugin(portal):
     """Install and prioritize the local-role PAS plug-in
     """
     out = StringIO()
-
     uf = getToolByName(portal, 'acl_users')
-
     existing = uf.objectIds()
 
     if LOCALROLE_PLUGIN_NAME not in existing:
         manage_addWorkspaceLocalRoleManager(uf, LOCALROLE_PLUGIN_NAME)
         activatePluginInterfaces(portal, LOCALROLE_PLUGIN_NAME, out)
     else:
-        print >> out, "%s already installed" % LOCALROLE_PLUGIN_NAME
-
+        out.write('{0} already installed'.format(LOCALROLE_PLUGIN_NAME))
     return out.getvalue()
 
 
@@ -32,7 +28,7 @@ def replace_local_role_manager(portal):
     PlonePAS"""
     uf = getToolByName(portal, 'acl_users', None)
     # Make sure we have a PAS user folder
-    if uf is not None and hasattr(aq_base(uf), 'plugins'):
+    if uf is not None and 'plugins' in aq_base(uf):
         # Remove the original plugin if it's there
         if 'local_roles' in uf.objectIds():
             orig_lr = getattr(uf, 'local_roles')
