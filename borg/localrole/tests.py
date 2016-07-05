@@ -1,7 +1,7 @@
 import doctest
 import unittest
 
-from zope.interface import implements
+from zope.interface import implementer
 from plone.testing import layered
 from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
 from Testing import ZopeTestCase as ztc
@@ -11,8 +11,8 @@ from borg.localrole import factory_adapter
 from borg.localrole import default_adapter
 
 
+@implementer(borg.localrole.interfaces.ILocalRoleProvider)
 class SimpleLocalRoleProvider(object):
-    implements(borg.localrole.interfaces.ILocalRoleProvider)
 
     def __init__(self, context):
         self.context = context

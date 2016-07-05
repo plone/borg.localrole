@@ -1,11 +1,12 @@
 from zope.component import adapts
-from zope.interface import implements
+from zope.interface import implementer
 from borg.localrole.interfaces import IFactoryTempFolder
 from borg.localrole.interfaces import ILocalRoleProvider
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 
 
+@implementer(ILocalRoleProvider)
 class FactoryTempFolderProvider(object):
     """A simple local role provider which just gathers the roles from
     the desired context::
@@ -92,7 +93,6 @@ class FactoryTempFolderProvider(object):
 
     """
     adapts(IFactoryTempFolder)
-    implements(ILocalRoleProvider)
 
     def __init__(self, obj):
         self.folder = obj
