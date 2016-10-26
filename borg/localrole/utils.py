@@ -1,12 +1,11 @@
-from StringIO import StringIO
-
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
+from borg.localrole.config import LOCALROLE_PLUGIN_NAME
+from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
 from Products.CMFCore.utils import getToolByName
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 from Products.PlonePAS.plugins.local_role import LocalRolesManager
-
-from borg.localrole.config import LOCALROLE_PLUGIN_NAME
-from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
+from StringIO import StringIO
 
 
 def setup_localrole_plugin(portal):
@@ -22,7 +21,7 @@ def setup_localrole_plugin(portal):
         manage_addWorkspaceLocalRoleManager(uf, LOCALROLE_PLUGIN_NAME)
         activatePluginInterfaces(portal, LOCALROLE_PLUGIN_NAME, out)
     else:
-        print >> out, "%s already installed" % LOCALROLE_PLUGIN_NAME
+        print >> out, '{0} already installed'.format(LOCALROLE_PLUGIN_NAME)
 
     return out.getvalue()
 

@@ -1,12 +1,15 @@
-from zope.component import adapts
-from zope.interface import implementer
+# -*- coding: utf-8 -*-
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from borg.localrole.interfaces import IFactoryTempFolder
 from borg.localrole.interfaces import ILocalRoleProvider
-from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
+from zope.component import adapter
+from zope.interface import implementer
 
 
 @implementer(ILocalRoleProvider)
+@adapter(IFactoryTempFolder)
 class FactoryTempFolderProvider(object):
     """A simple local role provider which just gathers the roles from
     the desired context::
@@ -14,13 +17,14 @@ class FactoryTempFolderProvider(object):
         >>> from Testing.ZopeTestCase import placeless
         >>> placeless.setUp()
         >>> from zope.component import provideAdapter
-        >>> from zope.interface import Interface, implements, directlyProvides
+        >>> from zope.interface import Interface, implementer, directlyProvides
         >>> from borg.localrole.workspace import WorkspaceLocalRoleManager
         >>> rm = WorkspaceLocalRoleManager('rm', 'A Role Manager')
 
         >>> from Acquisition import Implicit
-        >>> class DummyObject(Implicit):
-        ...     implements(Interface)
+        >>> @implementer(Interface)
+        ... class DummyObject(Implicit):
+        ...     pass
         >>> root = DummyObject()
 
 
@@ -92,7 +96,6 @@ class FactoryTempFolderProvider(object):
         >>> placeless.tearDown()
 
     """
-    adapts(IFactoryTempFolder)
 
     def __init__(self, obj):
         self.folder = obj

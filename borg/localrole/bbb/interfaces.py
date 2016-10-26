@@ -1,7 +1,10 @@
 from zope.interface import Interface
+# -*- coding: utf-8 -*-
+
 
 # BBB: These interfaces will be removed in a later version of borg.locarole.
 # You should use the interfaces in borg.localrole.interfaces instead!
+
 
 class IWorkspace(Interface):
     """A workspace in which custom local roles are needed
