@@ -24,7 +24,6 @@ setup(
     zip_safe=False,
     extras_require=dict(
       test=[
-          'Products.ATContentTypes',
           'plone.app.testing',
       ]
     ),

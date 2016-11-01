@@ -1,14 +1,13 @@
-import doctest
-import unittest
-
-from zope.interface import implementer
+from borg.localrole import default_adapter
+from borg.localrole import factory_adapter
+from plone.app.testing import PLONE_INTEGRATION_TESTING
 from plone.testing import layered
-from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
-from Testing import ZopeTestCase as ztc
+from plone.testing import zca
+from zope.interface import implementer
 
 import borg.localrole
-from borg.localrole import factory_adapter
-from borg.localrole import default_adapter
+import doctest
+import unittest
 
 
 @implementer(borg.localrole.interfaces.ILocalRoleProvider)
@@ -51,13 +50,17 @@ def test_suite():
                     'README.txt', package='borg.localrole',
                     optionflags=(doctest.ELLIPSIS |
                                  doctest.NORMALIZE_WHITESPACE)),
-                layer=PTC_FUNCTIONAL_TESTING),
-    # Add the tests that register adapters at the end
-        doctest.DocTestSuite(borg.localrole.workspace,
-            setUp=ztc.placeless.setUp(),
-            tearDown=ztc.placeless.tearDown(),
-            optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
-        doctest.DocTestSuite(factory_adapter),
+                layer=PLONE_INTEGRATION_TESTING),
+        layered(doctest.DocTestSuite(
+            borg.localrole.workspace,
+            optionflags=(doctest.ELLIPSIS |
+                         doctest.NORMALIZE_WHITESPACE)),
+                layer=zca.UNIT_TESTING),
+        layered(doctest.DocTestSuite(
+            factory_adapter,
+            optionflags=(doctest.ELLIPSIS |
+                         doctest.NORMALIZE_WHITESPACE)),
+                layer=zca.UNIT_TESTING),
         doctest.DocTestSuite(default_adapter),
         ]
 
