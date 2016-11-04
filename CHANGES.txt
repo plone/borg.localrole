@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Removed ZopeTestCase.  [maurits]
 
 
 3.1.2 (2016-08-17)
