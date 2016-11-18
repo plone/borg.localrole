@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 name = 'borg.localrole'
 version = '3.1.3.dev0'
 
-readme = open('README.txt').read()
-history = open('CHANGES.txt').read()
+readme = open('README.rst').read()
+history = open('CHANGES.rst').read()
 
 setup(
     name=name,
@@ -23,9 +23,9 @@ setup(
     platforms='Any',
     zip_safe=False,
     extras_require=dict(
-      test=[
-          'plone.app.testing',
-      ]
+        test=[
+            'plone.app.testing',
+        ],
     ),
     install_requires=[
         'setuptools',
