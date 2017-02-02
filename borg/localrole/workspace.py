@@ -68,9 +68,9 @@ def clra_cache_key(method, self, user, obj, object_roles):
           >>> request = HTTPRequest('', dict(HTTP_HOST='nohost:8080'), {})
 
           >>> try:
-          >>>     from Zope2.App.zcml import load_config
-          >>> except ImportError:
-          >>>     from Products.Five.zcml import load_config
+          ...     from Zope2.App.zcml import load_config
+          ... except ImportError:
+          ...     from Products.Five.zcml import load_config
           >>> import zope.component
           >>> import zope.annotation
           >>> load_config('meta.zcml', zope.component)
