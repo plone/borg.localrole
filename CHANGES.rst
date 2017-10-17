@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Made test compatible with zope4.  [pbauer]
 
 
 3.1.3 (2016-11-18)
