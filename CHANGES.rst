@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix test for Zope 4.
+  [pbauer]
 
 
 3.1.4 (2017-10-17)
