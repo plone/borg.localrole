@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from zope.component import adapts
-from zope.interface import implementer
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from borg.localrole.interfaces import IFactoryTempFolder
 from borg.localrole.interfaces import ILocalRoleProvider
-from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
+from zope.component import adapts
+from zope.interface import implementer
 
 
 @implementer(ILocalRoleProvider)

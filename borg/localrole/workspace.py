@@ -1,21 +1,22 @@
 # -*- coding: utf-8 -*-
-from plone.memoize.volatile import cache, DontCache
+from AccessControl import ClassSecurityInfo
+from Acquisition import aq_get
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from App.class_init import InitializeClass
+# BBB interfaces, to be removed
+from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
+from borg.localrole.bbb.interfaces import IWorkspace
+from borg.localrole.interfaces import ILocalRoleProvider
+from plone.memoize.volatile import cache
+from plone.memoize.volatile import DontCache
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from Products.PluggableAuthService.utils import classImplements
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapters
 
-from App.class_init import InitializeClass
-from Acquisition import aq_inner, aq_parent, aq_get
-from AccessControl import ClassSecurityInfo
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
-
-from borg.localrole.interfaces import ILocalRoleProvider
-
-# BBB interfaces, to be removed
-from borg.localrole.bbb.interfaces import IWorkspace
-from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
 
 manage_addWorkspaceLocalRoleManagerForm = PageTemplateFile(
         "zmi/WorkspaceLocalRoleManagerForm.pt", globals(),

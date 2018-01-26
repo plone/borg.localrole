@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- Cleanup: No self-contained buildout, utf8-headers, ...
+- Cleanup: No self-contained buildout, utf8-headers, isort, ...
   [jensens]
 
 - Fix test for Zope 4.

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-from zope.interface import Interface, implementer
-from zope.component import adapts
 from borg.localrole.interfaces import ILocalRoleProvider
+from zope.component import adapts
+from zope.interface import implementer
+from zope.interface import Interface
+
+import six
 
 
 @implementer(ILocalRoleProvider)

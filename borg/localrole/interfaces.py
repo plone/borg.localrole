@@ -2,6 +2,7 @@
 from zope.deferredimport import deprecated
 from zope.interface import Interface
 
+
 deprecated(
   "Please use borg.localrole.interfaces.ILocalRoleProvider instead",
   IWorkspace='borg.localrole.bbb.interfaces:IWorkspace')
