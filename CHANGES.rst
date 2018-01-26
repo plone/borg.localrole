@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Cleanup: No self-contained buildout, ...
+  [jensens]
+
 - Fix test for Zope 4.
   [pbauer]
 
