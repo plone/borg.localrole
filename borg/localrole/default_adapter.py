@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from borg.localrole.interfaces import ILocalRoleProvider
-from zope.component import adapts
+from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -8,6 +8,7 @@ import six
 
 
 @implementer(ILocalRoleProvider)
+@adapter(Interface)
 class DefaultLocalRoleAdapter(object):
     """Looks at __ac_local_roles__ to find local roles stored
     persistently on an object::
@@ -55,7 +56,6 @@ class DefaultLocalRoleAdapter(object):
         (('dummy2', ['Role1']),)
 
     """
-    adapts(Interface)
 
     def __init__(self, context):
         self.context = context

@@ -10,8 +10,12 @@ registerMultiPlugin(workspace.WorkspaceLocalRoleManager.meta_type)
 def initialize(context):
     # Register PAS plug-in
 
-    context.registerClass(workspace.WorkspaceLocalRoleManager,
-                          permission=add_user_folders,
-                          constructors=(workspace.manage_addWorkspaceLocalRoleManagerForm,
-                                          workspace.manage_addWorkspaceLocalRoleManager),
-                          visibility=None)
+    context.registerClass(
+        workspace.WorkspaceLocalRoleManager,
+        permission=add_user_folders,
+        constructors=(
+            workspace.manage_addWorkspaceLocalRoleManagerForm,
+            workspace.manage_addWorkspaceLocalRoleManager,
+        ),
+        visibility=None
+    )

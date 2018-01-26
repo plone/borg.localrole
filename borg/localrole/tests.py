@@ -47,22 +47,27 @@ class DummyUser(object):
 
 def test_suite():
     suite = [
-        layered(doctest.DocFileSuite(
-                    'README.txt', package='borg.localrole',
-                    optionflags=(doctest.ELLIPSIS |
-                                 doctest.NORMALIZE_WHITESPACE)),
-                layer=PLONE_INTEGRATION_TESTING),
-        layered(doctest.DocTestSuite(
-            borg.localrole.workspace,
-            optionflags=(doctest.ELLIPSIS |
-                         doctest.NORMALIZE_WHITESPACE)),
-                layer=zca.UNIT_TESTING),
-        layered(doctest.DocTestSuite(
-            factory_adapter,
-            optionflags=(doctest.ELLIPSIS |
-                         doctest.NORMALIZE_WHITESPACE)),
-                layer=zca.UNIT_TESTING),
+        layered(
+            doctest.DocFileSuite(
+                'README.txt',
+                package='borg.localrole',
+                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+            ),
+            layer=PLONE_INTEGRATION_TESTING),
+        layered(
+            doctest.DocTestSuite(
+                borg.localrole.workspace,
+                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+            ),
+            layer=zca.UNIT_TESTING
+        ),
+        layered(
+            doctest.DocTestSuite(
+                factory_adapter,
+                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+            ),
+            layer=zca.UNIT_TESTING
+        ),
         doctest.DocTestSuite(default_adapter),
-        ]
-
+    ]
     return unittest.TestSuite(suite)
