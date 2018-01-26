@@ -105,8 +105,9 @@ def clra_cache_key(method, self, user, obj, object_roles):
           ...         return '42!'
           >>> obj = DummyObjectWithPath()
           >>> obj.REQUEST = request
-          >>> clra_cache_key(fun, 'hmm', john, obj, ['foo', 'bar'])
-          ('john', '42!', ('foo', 'bar'))
+          >>> clra_cache_key(
+          ...     fun, 'hmm', john, obj, ['foo', 'bar']
+          ... )('john', '42!', ('foo', 'bar'))
 
         Now let's check if the results of a call to `checkLocalRolesAllowed`
         is indeed cached, i.e. is the request was annotated correctly.  First
