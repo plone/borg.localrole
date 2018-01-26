@@ -117,11 +117,11 @@ def clra_cache_key(method, self, user, obj, object_roles):
 
           >>> original = rm._get_userfolder
           >>> def logger(self, *args, **kw):
-          ...     print 'checkLocalRolesAllowed called...'
+          ...     print('checkLocalRolesAllowed called...')
           ...     return original(self, *args, **kw)
           >>> rm._get_userfolder = logger
 
-          >>> print rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar'])
+          >>> print(rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar']))
           checkLocalRolesAllowed called...
           None
           >>> [i for i in IAnnotations(request)]
@@ -131,7 +131,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
         Calling the method a second time should directly return the cached
         value, i.e. the logger shouldn't print anything:
 
-          >>> print rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar'])
+          >>> print(rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar']))
           None
 
     """

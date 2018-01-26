@@ -5,7 +5,7 @@ from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
 from Products.CMFCore.utils import getToolByName
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 from Products.PlonePAS.plugins.local_role import LocalRolesManager
-from StringIO import StringIO
+from six import StringIO
 
 
 def setup_localrole_plugin(portal):

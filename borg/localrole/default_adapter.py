@@ -7,6 +7,9 @@ from zope.interface import Interface
 import six
 
 
+import six
+
+
 @implementer(ILocalRoleProvider)
 @adapter(Interface)
 class DefaultLocalRoleAdapter(object):
@@ -77,4 +80,4 @@ class DefaultLocalRoleAdapter(object):
     def getAllRoles(self):
         """Returns all the local roles assigned in this context:
         (principal_id, [role1, role2])"""
-        return self._rolemap.iteritems()
+        return six.iteritems(self._rolemap)
