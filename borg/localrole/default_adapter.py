@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from zope.interface import Interface, implementer
 from zope.component import adapts
 from borg.localrole.interfaces import ILocalRoleProvider

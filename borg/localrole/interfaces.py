@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from zope.deferredimport import deprecated
 from zope.interface import Interface
 

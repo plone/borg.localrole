@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.memoize.volatile import cache, DontCache
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapters

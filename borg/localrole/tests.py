@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from borg.localrole import default_adapter
 from borg.localrole import factory_adapter
 from plone.app.testing import PLONE_INTEGRATION_TESTING
