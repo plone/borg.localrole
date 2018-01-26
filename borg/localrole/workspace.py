@@ -421,8 +421,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         principal_ids.insert(0, user.getId())
         return principal_ids
 
-    security.declarePrivate("getRolesInContext")
-
+    @security.private
     def getRolesInContext(self, user, object):
         # we combine the permission of the user with those of the
         # groups she belongs to
@@ -454,8 +453,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
                             )
         return list(roles)
 
-    security.declarePrivate("checkLocalRolesAllowed")
-
+    @security.private
     @cache(get_key=clra_cache_key, get_cache=store_on_request)
     def checkLocalRolesAllowed(self, user, object, object_roles):
         """Checks if the user has one of the specified roles in the
@@ -499,8 +497,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
         return None
 
-    security.declarePrivate("getAllLocalRolesInContext")
-
+    @security.private
     def getAllLocalRolesInContext(self, object):
         rolemap = {}
         for obj in self._parent_chain(object):
@@ -516,8 +513,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         return rolemap
     # XXX: for BBB only
 
-    security.declarePrivate("_groups")
-
+    @security.private
     def _groups(self, obj, user, workspace):
         """If workspace provides IGroupAwareWorkspace and the user has
         a getGroups() method, yield each group_id returned by that method.

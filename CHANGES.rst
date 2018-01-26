@@ -21,7 +21,7 @@ Bug fixes:
     - isort, 
     - ZCA-decorators
     - formatting/readability/pep8,
-    - ...
+    - Security decorators
 
 - Fix test for Zope 4.
   [pbauer]
