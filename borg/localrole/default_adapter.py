@@ -7,9 +7,6 @@ from zope.interface import Interface
 import six
 
 
-import six
-
-
 @implementer(ILocalRoleProvider)
 @adapter(Interface)
 class DefaultLocalRoleAdapter(object):

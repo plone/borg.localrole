@@ -105,9 +105,8 @@ def clra_cache_key(method, self, user, obj, object_roles):
           ...         return '42!'
           >>> obj = DummyObjectWithPath()
           >>> obj.REQUEST = request
-          >>> clra_cache_key(
-          ...     fun, 'hmm', john, obj, ['foo', 'bar']
-          ... )('john', '42!', ('foo', 'bar'))
+          >>> clra_cache_key(fun, 'hmm', john, obj, ['foo', 'bar'])
+          ('john', '42!', ('foo', 'bar'))
 
         Now let's check if the results of a call to `checkLocalRolesAllowed`
         is indeed cached, i.e. is the request was annotated correctly.  First
@@ -126,8 +125,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
           checkLocalRolesAllowed called...
           None
           >>> [i for i in IAnnotations(request)]
-          ["borg.localrole.workspace.checkLocalRolesAllowed:
-          ('john', '42!', ('foo', 'bar'))"]
+          ["borg.localrole.workspace.checkLocalRolesAllowed:('john', '42!', ('foo', 'bar'))"]
 
         Calling the method a second time should directly return the cached
         value, i.e. the logger shouldn't print anything:
@@ -135,7 +133,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
           >>> print(rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar']))
           None
 
-    """
+    """  # noqa: E501
     request = aq_get(obj, 'REQUEST', None)
     if IAnnotations(request, None) is None:
         raise DontCache
