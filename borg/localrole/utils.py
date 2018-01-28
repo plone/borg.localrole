@@ -1,12 +1,11 @@
-from StringIO import StringIO
-
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
+from borg.localrole.config import LOCALROLE_PLUGIN_NAME
+from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
 from Products.CMFCore.utils import getToolByName
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 from Products.PlonePAS.plugins.local_role import LocalRolesManager
-
-from borg.localrole.config import LOCALROLE_PLUGIN_NAME
-from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
+from six import StringIO
 
 
 def setup_localrole_plugin(portal):

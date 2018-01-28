@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from zope.interface import Interface
+
 
 # BBB: These interfaces will be removed in a later version of borg.locarole.
 # You should use the interfaces in borg.localrole.interfaces instead!

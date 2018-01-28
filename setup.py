@@ -1,4 +1,7 @@
-from setuptools import setup, find_packages
+# -*- coding: utf-8 -*-
+from setuptools import find_packages
+from setuptools import setup
+
 
 name = 'borg.localrole'
 version = '3.1.5.dev0'
@@ -29,6 +32,7 @@ setup(
     ),
     install_requires=[
         'setuptools',
+        'six',
         'zope.annotation',
         'zope.component',
         'zope.deferredimport',

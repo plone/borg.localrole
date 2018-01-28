@@ -1,35 +1,49 @@
-from plone.memoize.volatile import cache, DontCache
+# -*- coding: utf-8 -*-
+from AccessControl import ClassSecurityInfo
+from Acquisition import aq_get
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from App.class_init import InitializeClass
+# BBB interfaces, to be removed
+from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
+from borg.localrole.bbb.interfaces import IWorkspace
+from borg.localrole.interfaces import ILocalRoleProvider
+from plone.memoize.volatile import cache
+from plone.memoize.volatile import DontCache
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from Products.PluggableAuthService.utils import classImplements
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapters
 
-from App.class_init import InitializeClass
-from Acquisition import aq_inner, aq_parent, aq_get
-from AccessControl import ClassSecurityInfo
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PlonePAS.interfaces.plugins import ILocalRolesPlugin
-
-from borg.localrole.interfaces import ILocalRoleProvider
-
-# BBB interfaces, to be removed
-from borg.localrole.bbb.interfaces import IWorkspace
-from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
 
 manage_addWorkspaceLocalRoleManagerForm = PageTemplateFile(
-        "zmi/WorkspaceLocalRoleManagerForm.pt", globals(),
-        __name__="manage_addWorkspaceRoleManagerForm")
+    "zmi/WorkspaceLocalRoleManagerForm.pt",
+    globals(),
+    __name__="manage_addWorkspaceRoleManagerForm"
+)
 
 
-def manage_addWorkspaceLocalRoleManager(dispatcher, id, title=None, REQUEST=None):
-    """Add a WorkspaceLocalRoleManager to a Pluggable Authentication Services."""
+def manage_addWorkspaceLocalRoleManager(
+    dispatcher,
+    id,
+    title=None,
+    REQUEST=None
+):
+    """Add a WorkspaceLocalRoleManager to a Pluggable Authentication
+    Services.
+    """
     wlrm = WorkspaceLocalRoleManager(id, title)
     dispatcher._setObject(wlrm.getId(), wlrm)
 
     if REQUEST is not None:
         REQUEST.RESPONSE.redirect(
-                '%s/manage_workspace?manage_tabs_message=WorkspaceLocalRoleManager+added.'
-                % dispatcher.absolute_url())
+            '{0}/manage_workspace?'
+            'manage_tabs_message=WorkspaceLocalRoleManager+added.'.format(
+                dispatcher.absolute_url()
+            )
+        )
 
 
 # memoize support for `checkLocalRolesAllowed`
@@ -103,11 +117,11 @@ def clra_cache_key(method, self, user, obj, object_roles):
 
           >>> original = rm._get_userfolder
           >>> def logger(self, *args, **kw):
-          ...     print 'checkLocalRolesAllowed called...'
+          ...     print('checkLocalRolesAllowed called...')
           ...     return original(self, *args, **kw)
           >>> rm._get_userfolder = logger
 
-          >>> print rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar'])
+          >>> print(rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar']))
           checkLocalRolesAllowed called...
           None
           >>> [i for i in IAnnotations(request)]
@@ -116,10 +130,10 @@ def clra_cache_key(method, self, user, obj, object_roles):
         Calling the method a second time should directly return the cached
         value, i.e. the logger shouldn't print anything:
 
-          >>> print rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar'])
+          >>> print(rm.checkLocalRolesAllowed(john, obj, ['foo', 'bar']))
           None
 
-    """
+    """  # noqa: E501
     request = aq_get(obj, 'REQUEST', None)
     if IAnnotations(request, None) is None:
         raise DontCache
@@ -142,8 +156,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
     First we need to make and register an adapter to provide some roles::
 
-        >>> from zope.interface import implements, Interface
-        >>> from zope.component import adapts
+        >>> from zope.interface import implementer, Interface
+        >>> from zope.component import adapter
         >>> from borg.localrole.tests import SimpleLocalRoleProvider
         >>> from borg.localrole.tests import DummyUser
         >>> from zope.component import provideAdapter
@@ -153,8 +167,9 @@ class WorkspaceLocalRoleManager(BasePlugin):
     We need an object to adapt, we require nothing of this object,
     except it must be adaptable (e.g. have an interface)::
 
-        >>> class DummyObject(object):
-        ...     implements(Interface)
+        >>> @implementer(Interface)
+        ... class DummyObject(object):
+        ...     pass
         >>> ob = DummyObject()
 
     And we need some users that we'll check the permissions of::
@@ -250,12 +265,14 @@ class WorkspaceLocalRoleManager(BasePlugin):
         >>> from zope.interface import directlyProvides
         >>> directlyProvides(next, ISpecial1)
         >>> directlyProvides(other, ISpecial2)
-        >>> class Adapter1(LessSimpleLocalRoleProvider):
-        ...     adapts(ISpecial1)
+        >>> @adapter(ISpecial1)
+        ... class Adapter1(LessSimpleLocalRoleProvider):
+        ...
         ...     userid = 'bogus_user'
         ...     roles = ('Bar',)
-        >>> class Adapter2(LessSimpleLocalRoleProvider):
-        ...     adapts(ISpecial2)
+        >>> @adapter(ISpecial2)
+        ... class Adapter2(LessSimpleLocalRoleProvider):
+        ...
         ...     userid = 'bogus_user3'
         ...     roles = ('Foobar',)
         >>> user3 = DummyUser('bogus_user3')
@@ -403,8 +420,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         principal_ids.insert(0, user.getId())
         return principal_ids
 
-    security.declarePrivate("getRolesInContext")
-
+    @security.private
     def getRolesInContext(self, user, object):
         # we combine the permission of the user with those of the
         # groups she belongs to
@@ -424,15 +440,19 @@ class WorkspaceLocalRoleManager(BasePlugin):
                         roles.update(a.getRoles(pid))
                 # XXX: BBB code, kicks in only if there's no proper adapter
                 if count == -1:
-                    workspace = IGroupAwareWorkspace(obj, IWorkspace(obj, None))
+                    workspace = IGroupAwareWorkspace(
+                        obj,
+                        IWorkspace(obj, None)
+                    )
                     if workspace is not None:
                         roles.update(workspace.getLocalRolesForPrincipal(user))
                         for group in self._groups(obj, user, workspace):
-                            roles.update(workspace.getLocalRolesForPrincipal(group))
+                            roles.update(
+                                workspace.getLocalRolesForPrincipal(group)
+                            )
         return list(roles)
 
-    security.declarePrivate("checkLocalRolesAllowed")
-
+    @security.private
     @cache(get_key=clra_cache_key, get_cache=store_on_request)
     def checkLocalRolesAllowed(self, user, object, object_roles):
         """Checks if the user has one of the specified roles in the
@@ -476,8 +496,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
         return None
 
-    security.declarePrivate("getAllLocalRolesInContext")
-
+    @security.private
     def getAllLocalRolesInContext(self, object):
         rolemap = {}
         for obj in self._parent_chain(object):
@@ -493,8 +512,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         return rolemap
     # XXX: for BBB only
 
-    security.declarePrivate("_groups")
-
+    @security.private
     def _groups(self, obj, user, workspace):
         """If workspace provides IGroupAwareWorkspace and the user has
         a getGroups() method, yield each group_id returned by that method.
@@ -505,6 +523,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
                 acl_users = aq_parent(aq_inner(self))
                 for group_id in getGroups():
                     yield acl_users.getGroupById(group_id)
+
 
 classImplements(WorkspaceLocalRoleManager, ILocalRolesPlugin)
 InitializeClass(WorkspaceLocalRoleManager)

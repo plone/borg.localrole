@@ -14,6 +14,20 @@ New features:
 
 Bug fixes:
 
+- Python 2 / 3 compat with six.
+  [jensens]
+
+- Cleanup: 
+
+    - No self-contained buildout, 
+    - utf8-headers, 
+    - isort, 
+    - ZCA-decorators
+    - formatting/readability/pep8,
+    - Security decorators
+  
+  [jensens]
+
 - Fix test for Zope 4.
   [pbauer]
 
