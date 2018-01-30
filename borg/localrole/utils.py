@@ -2,8 +2,13 @@ from StringIO import StringIO
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
-from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 from Products.PlonePAS.plugins.local_role import LocalRolesManager
+try:
+    # PlonePAS 5.0.1 or higher
+    from Products.PlonePAS.setuphandlers import activatePluginInterfaces
+except ImportError:
+    # PlonePAS exactly 5.0, or lower.
+    from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 
 from borg.localrole.config import LOCALROLE_PLUGIN_NAME
 from borg.localrole.workspace import manage_addWorkspaceLocalRoleManager
