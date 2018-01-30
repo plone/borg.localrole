@@ -4,7 +4,9 @@ Changelog
 3.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Import ``activatePluginInterfaces`` from the canonical place in ``Products.PlonePAS``.
+  This was moved from ``Extensions/Install.py`` to ``setuphandlers.py`` in PlonePAS 5.0.1.
+  We try both places for backwards compatibility.  [maurits]
 
 
 3.0.2 - 2010-10-27
@@ -62,7 +64,7 @@ Changelog
 - Support caching of allowed local roles on the request.
   [witsch]
 
-- Renamed the default adapter to "default" so that people don't 
+- Renamed the default adapter to "default" so that people don't
   accidentally override it with an unnamed adapter. Overriding the default
   should be possible, but is a marginal use case. If it's overridden but
   not replicated properly, all sorts of problems can result.
@@ -77,4 +79,3 @@ Changelog
 ------------------
 
 - Baseline for Plone 3.1
-
