@@ -39,7 +39,7 @@ setup(
         'zope.interface',
         'Products.CMFCore',
         'Products.GenericSetup',
-        'Products.PlonePAS',
+        'Products.PlonePAS >= 5.0.1',
         'Products.PluggableAuthService',
         'plone.memoize',
         'Acquisition',
