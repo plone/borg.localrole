@@ -14,18 +14,21 @@ New features:
 
 Bug fixes:
 
+- Import ``activatePluginInterfaces`` from the canonical place in ``Products.PlonePAS``.
+  [maurits]
+
 - Python 2 / 3 compat with six.
   [jensens]
 
-- Cleanup: 
+- Cleanup:
 
-    - No self-contained buildout, 
-    - utf8-headers, 
-    - isort, 
+    - No self-contained buildout,
+    - utf8-headers,
+    - isort,
     - ZCA-decorators
     - formatting/readability/pep8,
     - Security decorators
-  
+
   [jensens]
 
 - Fix test for Zope 4.
