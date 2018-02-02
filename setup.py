@@ -4,7 +4,7 @@ from setuptools import setup
 
 
 name = 'borg.localrole'
-version = '3.1.5'
+version = '3.1.6.dev0'
 
 readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
