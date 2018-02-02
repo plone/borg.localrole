@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 name = 'borg.localrole'
 version = '3.0.3.dev0'
 
-readme = open('README.txt').read()
-history = open('CHANGES.txt').read()
+readme = open('README.rst').read()
+history = open('CHANGES.rst').read()
 
 setup(name = name,
       version = version,
