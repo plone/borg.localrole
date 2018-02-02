@@ -4,6 +4,8 @@ Changelog
 3.0.3 (unreleased)
 ------------------
 
+Bug fixes:
+
 - Import ``activatePluginInterfaces`` from the canonical place in ``Products.PlonePAS``.
   This was moved from ``Extensions/Install.py`` to ``setuphandlers.py`` in PlonePAS 5.0.1.
   We try both places for backwards compatibility.  [maurits]
