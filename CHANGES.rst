@@ -4,14 +4,6 @@ Changelog
 3.1.5 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Import ``activatePluginInterfaces`` from the canonical place in ``Products.PlonePAS``.
