@@ -6,7 +6,7 @@ history = open('CHANGES.rst').read()
 
 setup(
     name='borg.localrole',
-    version='3.0.3',
+    version='3.0.4.dev0',
     description=('A PAS plugin which can manage local roles via an '
                  'adapter lookup on the current context'),
     long_description=readme + '\n' + history,
