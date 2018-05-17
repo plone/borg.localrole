@@ -410,7 +410,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
                 raise StopIteration
             new = aq_parent(aq_inner(obj))
             # if the obj is a method we get the class
-            obj = getattr(obj, 'im_self', new)
+            obj = getattr(obj, '__self__', new)
 
     def _get_principal_ids(self, user):
         """Returns a list of the ids of all involved security
