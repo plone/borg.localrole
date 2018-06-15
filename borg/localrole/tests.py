@@ -8,6 +8,8 @@ from zope.interface import implementer
 
 import borg.localrole
 import doctest
+import re
+import six
 import unittest
 
 
@@ -45,6 +47,13 @@ class DummyUser(object):
         return ()
 
 
+class Py23DocChecker(doctest.OutputChecker):
+    def check_output(self, want, got, optionflags):
+        if six.PY2:
+            got = re.sub("set\(\[(.*?)\]\)", "{\\1}", got)
+        return doctest.OutputChecker.check_output(self, want, got, optionflags)
+
+
 def test_suite():
     suite = [
         layered(
@@ -57,7 +66,8 @@ def test_suite():
         layered(
             doctest.DocTestSuite(
                 borg.localrole.workspace,
-                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
+                checker=Py23DocChecker(),
             ),
             layer=zca.UNIT_TESTING
         ),

@@ -15,13 +15,14 @@ class FactoryTempFolderProvider(object):
     the desired context::
 
         >>> from zope.component import provideAdapter
-        >>> from zope.interface import Interface, implements, directlyProvides
+        >>> from zope.interface import Interface, implementer, directlyProvides
         >>> from borg.localrole.workspace import WorkspaceLocalRoleManager
         >>> rm = WorkspaceLocalRoleManager('rm', 'A Role Manager')
 
         >>> from Acquisition import Implicit
-        >>> class DummyObject(Implicit):
-        ...     implements(Interface)
+        >>> @implementer(Interface)
+        ... class DummyObject(Implicit):
+        ...     pass
         >>> root = DummyObject()
 
 
@@ -53,9 +54,8 @@ class FactoryTempFolderProvider(object):
 
         >>> def getRolesInContext(user, context):
         ...     return rm.getRolesInContext(user, context)
-        >>> from new import instancemethod
-        >>> user1.getRolesInContext = instancemethod(getRolesInContext, user1,
-        ...                                          DummyUser)
+        >>> from types import MethodType
+        >>> user1.getRolesInContext = MethodType(getRolesInContext, user1)
 
 
     We add special interface to our Folder which allows us to provide

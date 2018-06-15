@@ -56,9 +56,10 @@ def clra_cache_key(method, self, user, obj, object_roles):
         To test we'll nee an adaptable object, a user and the method which
         results' we'd like to cache:
 
-          >>> from zope.interface import implements, Interface
-          >>> class DummyObject(object):
-          ...     implements(Interface)
+          >>> from zope.interface import implementer, Interface
+          >>> @implementer(Interface)
+          ... class DummyObject(object):
+          ...     pass
           >>> obj = DummyObject()
 
           >>> from borg.localrole.tests import DummyUser
@@ -73,7 +74,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
           >>> clra_cache_key(fun, 'me', john, obj, ['foo', 'bar'])
           Traceback (most recent call last):
           ...
-          DontCache
+          plone.memoize.volatile.DontCache
 
         So let's add one and try again.  Before we also need to mark it as
         being annotatable, which normally happens elsewhere:
@@ -190,7 +191,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         >>> rm.checkLocalRolesAllowed(user1, ob, ['Bar', 'Baz']) is None
         True
         >>> rm.getAllLocalRolesInContext(ob)
-        {'bogus_user': set(['Foo'])}
+        {'bogus_user': {'Foo'}}
 
 
     Multiple Role Providers
@@ -224,7 +225,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         >>> rm.checkLocalRolesAllowed(user1, ob, ['Bar', 'Baz']) is None
         True
         >>> rm.getAllLocalRolesInContext(ob)
-        {'bogus_user2': set(['Foo', 'Baz']), 'bogus_user': set(['Foo'])}
+        {'bogus_user': {'Foo'}, 'bogus_user2': {'Foo', 'Baz'}}
 
     But our second user notices the change, note that even though two
     of our local role providers grant the role 'Foo', it is not duplicated::
@@ -312,7 +313,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         >>> rm.checkLocalRolesAllowed(user1, next,  ['Foo', 'Baz']) is None
         True
         >>> rm.getAllLocalRolesInContext(last)
-        {'bogus_user2': set(['Foo', 'Baz']), 'bogus_user': set(['Foo', 'Bar'])}
+        {'bogus_user': {'Foo', 'Bar'}, 'bogus_user2': {'Foo', 'Baz'}}
 
     It's important to note, that roles are acquired only by
     containment.  Additional wrapping cannot change the security on an
