@@ -3,7 +3,7 @@ from AccessControl import ClassSecurityInfo
 from Acquisition import aq_get
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from App.class_init import InitializeClass
+from AccessControl.class_init import InitializeClass
 # BBB interfaces, to be removed
 from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
 from borg.localrole.bbb.interfaces import IWorkspace
