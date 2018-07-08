@@ -231,8 +231,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
     But our second user notices the change, note that even though two
     of our local role providers grant the role 'Foo', it is not duplicated::
 
-        >>> rm.getRolesInContext(user2, ob)
-        ['Foo', 'Baz']
+        >>> set(rm.getRolesInContext(user2, ob)) == {'Foo', 'Baz'}
+        True
         >>> rm.checkLocalRolesAllowed(user2, ob, ['Bar', 'Foo', 'Baz'])
         1
         >>> rm.checkLocalRolesAllowed(user2, ob, ['Bar', 'Baz'])
@@ -289,19 +289,19 @@ class WorkspaceLocalRoleManager(BasePlugin):
     SimpleLocalRoleProvider, and LessSimpleLocalRoleProvider, as well
     as acquired from Adapter1 on 'next':
 
-        >>> rm.getRolesInContext(user1, last)
-        ['Foo', 'Bar']
+        >>> set(rm.getRolesInContext(user1, last)) == {'Foo', 'Bar'}
+        True
 
-        >>> rm.getRolesInContext(user2, last)
-        ['Foo', 'Baz']
+        >>> set(rm.getRolesInContext(user2, last)) == {'Foo', 'Baz'}
+        True
 
     If we look at the parent, we get the same results, because the
     SimpleLocalRoleProvider adapter also applies to the 'root'
     object. However, if we enable local role blocking on 'next' we
     won't see the roles from the 'root'::
 
-        >>> rm.getRolesInContext(user1, next)
-        ['Foo', 'Bar']
+        >>> set(rm.getRolesInContext(user1, next)) == {'Foo', 'Bar'}
+        True
         >>> next.__ac_local_roles_block__ = True
         >>> rm.getRolesInContext(user1, next)
         ['Bar']
@@ -325,16 +325,16 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
         >>> rm.getRolesInContext(user3, last)
         ['Foo']
-        >>> rm.getRolesInContext(user3, other)
-        ['Foobar', 'Foo']
+        >>> set(rm.getRolesInContext(user3, other)) == {'Foobar', 'Foo'}
+        True
         >>> rm.getRolesInContext(user3, last.__of__(other))
         ['Foo']
 
     It's also important that methods of objects yield the same local
     roles as the objects would
 
-        >>> rm.getRolesInContext(user3, other.stupid_method)
-        ['Foobar', 'Foo']
+        >>> set(rm.getRolesInContext(user3, other.stupid_method)) == {'Foobar', 'Foo'}
+        True
 
     Group Support
     -------------
@@ -353,8 +353,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
         ...     roles = ('Foobar',)
 
         >>> provideAdapter(Adapter3, adapts=(Interface,), name='group_adapter')
-        >>> rm.getRolesInContext(user4, last)
-        ['Foobar', 'Foo']
+        >>> set(rm.getRolesInContext(user4, last)) == {'Foobar', 'Foo'}
+        True
 
 
     Wrong User Folder
