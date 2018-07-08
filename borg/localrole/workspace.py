@@ -224,8 +224,9 @@ class WorkspaceLocalRoleManager(BasePlugin):
         1
         >>> rm.checkLocalRolesAllowed(user1, ob, ['Bar', 'Baz']) is None
         True
-        >>> rm.getAllLocalRolesInContext(ob)
-        {'bogus_user': {'Foo'}, 'bogus_user2': {'Foo', 'Baz'}}
+        >>> expected = {'bogus_user': {'Foo'}, 'bogus_user2': {'Foo', 'Baz'}}
+        >>> rm.getAllLocalRolesInContext(ob) == expected
+        True
 
     But our second user notices the change, note that even though two
     of our local role providers grant the role 'Foo', it is not duplicated::
@@ -312,8 +313,9 @@ class WorkspaceLocalRoleManager(BasePlugin):
         1
         >>> rm.checkLocalRolesAllowed(user1, next,  ['Foo', 'Baz']) is None
         True
-        >>> rm.getAllLocalRolesInContext(last)
-        {'bogus_user': {'Foo', 'Bar'}, 'bogus_user2': {'Foo', 'Baz'}}
+        >>> expected = {'bogus_user': {'Foo', 'Bar'}, 'bogus_user2': {'Foo', 'Baz'}}
+        >>> rm.getAllLocalRolesInContext(last) == expected
+        True
 
     It's important to note, that roles are acquired only by
     containment.  Additional wrapping cannot change the security on an
