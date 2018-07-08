@@ -51,6 +51,10 @@ class Py23DocChecker(doctest.OutputChecker):
     def check_output(self, want, got, optionflags):
         if six.PY2:
             got = re.sub("set\(\[(.*?)\]\)", "{\\1}", got)
+            want = re.sub(
+                'plone.memoize.volatile.DontCache',
+                'DontCache', want
+            )
         return doctest.OutputChecker.check_output(self, want, got, optionflags)
 
 
