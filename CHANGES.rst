@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Python 2 / 3 compatibility.
+  [ale-rt, pbauer]
 
 
 3.1.5 (2018-02-02)
