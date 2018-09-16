@@ -51,12 +51,15 @@ setup(
         'Framework :: Plone',
         'Framework :: Plone :: 5.0',
         'Framework :: Plone :: 5.1',
+        'Framework :: Plone :: 5.2',
         'Intended Audience :: Other Audience',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',  # noqa
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )

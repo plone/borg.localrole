@@ -3,7 +3,7 @@ from AccessControl import ClassSecurityInfo
 from Acquisition import aq_get
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from App.class_init import InitializeClass
+from AccessControl.class_init import InitializeClass
 # BBB interfaces, to be removed
 from borg.localrole.bbb.interfaces import IGroupAwareWorkspace
 from borg.localrole.bbb.interfaces import IWorkspace
@@ -56,9 +56,10 @@ def clra_cache_key(method, self, user, obj, object_roles):
         To test we'll nee an adaptable object, a user and the method which
         results' we'd like to cache:
 
-          >>> from zope.interface import implements, Interface
-          >>> class DummyObject(object):
-          ...     implements(Interface)
+          >>> from zope.interface import implementer, Interface
+          >>> @implementer(Interface)
+          ... class DummyObject(object):
+          ...     pass
           >>> obj = DummyObject()
 
           >>> from borg.localrole.tests import DummyUser
@@ -73,7 +74,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
           >>> clra_cache_key(fun, 'me', john, obj, ['foo', 'bar'])
           Traceback (most recent call last):
           ...
-          DontCache
+          plone.memoize.volatile.DontCache
 
         So let's add one and try again.  Before we also need to mark it as
         being annotatable, which normally happens elsewhere:
@@ -190,7 +191,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         >>> rm.checkLocalRolesAllowed(user1, ob, ['Bar', 'Baz']) is None
         True
         >>> rm.getAllLocalRolesInContext(ob)
-        {'bogus_user': set(['Foo'])}
+        {'bogus_user': {'Foo'}}
 
 
     Multiple Role Providers
@@ -223,14 +224,15 @@ class WorkspaceLocalRoleManager(BasePlugin):
         1
         >>> rm.checkLocalRolesAllowed(user1, ob, ['Bar', 'Baz']) is None
         True
-        >>> rm.getAllLocalRolesInContext(ob)
-        {'bogus_user2': set(['Foo', 'Baz']), 'bogus_user': set(['Foo'])}
+        >>> expected = {'bogus_user': {'Foo'}, 'bogus_user2': {'Foo', 'Baz'}}
+        >>> rm.getAllLocalRolesInContext(ob) == expected
+        True
 
     But our second user notices the change, note that even though two
     of our local role providers grant the role 'Foo', it is not duplicated::
 
-        >>> rm.getRolesInContext(user2, ob)
-        ['Foo', 'Baz']
+        >>> set(rm.getRolesInContext(user2, ob)) == {'Foo', 'Baz'}
+        True
         >>> rm.checkLocalRolesAllowed(user2, ob, ['Bar', 'Foo', 'Baz'])
         1
         >>> rm.checkLocalRolesAllowed(user2, ob, ['Bar', 'Baz'])
@@ -287,19 +289,19 @@ class WorkspaceLocalRoleManager(BasePlugin):
     SimpleLocalRoleProvider, and LessSimpleLocalRoleProvider, as well
     as acquired from Adapter1 on 'next':
 
-        >>> rm.getRolesInContext(user1, last)
-        ['Foo', 'Bar']
+        >>> set(rm.getRolesInContext(user1, last)) == {'Foo', 'Bar'}
+        True
 
-        >>> rm.getRolesInContext(user2, last)
-        ['Foo', 'Baz']
+        >>> set(rm.getRolesInContext(user2, last)) == {'Foo', 'Baz'}
+        True
 
     If we look at the parent, we get the same results, because the
     SimpleLocalRoleProvider adapter also applies to the 'root'
     object. However, if we enable local role blocking on 'next' we
     won't see the roles from the 'root'::
 
-        >>> rm.getRolesInContext(user1, next)
-        ['Foo', 'Bar']
+        >>> set(rm.getRolesInContext(user1, next)) == {'Foo', 'Bar'}
+        True
         >>> next.__ac_local_roles_block__ = True
         >>> rm.getRolesInContext(user1, next)
         ['Bar']
@@ -311,8 +313,9 @@ class WorkspaceLocalRoleManager(BasePlugin):
         1
         >>> rm.checkLocalRolesAllowed(user1, next,  ['Foo', 'Baz']) is None
         True
-        >>> rm.getAllLocalRolesInContext(last)
-        {'bogus_user2': set(['Foo', 'Baz']), 'bogus_user': set(['Foo', 'Bar'])}
+        >>> expected = {'bogus_user': {'Foo', 'Bar'}, 'bogus_user2': {'Foo', 'Baz'}}
+        >>> rm.getAllLocalRolesInContext(last) == expected
+        True
 
     It's important to note, that roles are acquired only by
     containment.  Additional wrapping cannot change the security on an
@@ -322,16 +325,16 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
         >>> rm.getRolesInContext(user3, last)
         ['Foo']
-        >>> rm.getRolesInContext(user3, other)
-        ['Foobar', 'Foo']
+        >>> set(rm.getRolesInContext(user3, other)) == {'Foobar', 'Foo'}
+        True
         >>> rm.getRolesInContext(user3, last.__of__(other))
         ['Foo']
 
     It's also important that methods of objects yield the same local
     roles as the objects would
 
-        >>> rm.getRolesInContext(user3, other.stupid_method)
-        ['Foobar', 'Foo']
+        >>> set(rm.getRolesInContext(user3, other.stupid_method)) == {'Foobar', 'Foo'}
+        True
 
     Group Support
     -------------
@@ -350,8 +353,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
         ...     roles = ('Foobar',)
 
         >>> provideAdapter(Adapter3, adapts=(Interface,), name='group_adapter')
-        >>> rm.getRolesInContext(user4, last)
-        ['Foobar', 'Foo']
+        >>> set(rm.getRolesInContext(user4, last)) == {'Foobar', 'Foo'}
+        True
 
 
     Wrong User Folder
@@ -410,7 +413,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
                 raise StopIteration
             new = aq_parent(aq_inner(obj))
             # if the obj is a method we get the class
-            obj = getattr(obj, 'im_self', new)
+            obj = getattr(obj, '__self__', new)
 
     def _get_principal_ids(self, user):
         """Returns a list of the ids of all involved security
