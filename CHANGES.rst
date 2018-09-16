@@ -17,6 +17,10 @@ Bug fixes:
 - Python 2 / 3 compatibility.
   [ale-rt, pbauer]
 
+- Fix issue StopIteration raising a Runtimeerror in Python 3.7
+  See https://www.python.org/dev/peps/pep-0479/
+  [pbauer]
+
 
 3.1.5 (2018-02-02)
 ------------------

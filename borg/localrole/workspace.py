@@ -410,7 +410,7 @@ class WorkspaceLocalRoleManager(BasePlugin):
         while obj is not None:
             yield obj
             if getattr(obj, '__ac_local_roles_block__', None):
-                raise StopIteration
+                return
             new = aq_parent(aq_inner(obj))
             # if the obj is a method we get the class
             obj = getattr(obj, '__self__', new)
