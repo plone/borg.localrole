@@ -4,14 +4,6 @@ Changelog
 3.1.6 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Python 2 / 3 compatibility.
