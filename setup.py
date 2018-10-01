@@ -18,7 +18,7 @@ setup(
     keywords='Plone PAS local roles',
     author='Borg Collective',
     author_email='borg@plone.org',
-    url='https://pypi.python.org/pypi/borg.localrole',
+    url='https://pypi.org/project/borg.localrole',
     license='LGPL',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['borg'],
