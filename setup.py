@@ -20,7 +20,7 @@ setup(
     author_email='borg@plone.org',
     url='https://pypi.org/project/borg.localrole',
     license='LGPL',
-    packages=find_packages(exclude=['ez_setup']),
+    packages=find_packages(),
     namespace_packages=['borg'],
     include_package_data=True,
     platforms='Any',
