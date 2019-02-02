@@ -3,3 +3,6 @@ include *.rst
 recursive-include borg *
 
 global-exclude *pyc
+include pyproject.toml
+recursive-exclude news *
+exclude news
