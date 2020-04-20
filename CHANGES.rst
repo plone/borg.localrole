@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.1.8 (2020-04-20)
+------------------
+
+Bug fixes:
+
+
+- Minor packaging updates. (#1)
+
+
 3.1.7 (2020-03-21)
 ------------------
 
