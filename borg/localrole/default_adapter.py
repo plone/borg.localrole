@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from borg.localrole.interfaces import ILocalRoleProvider
+from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -30,6 +31,7 @@ class DefaultLocalRoleAdapter(object):
     Same goes if the RoleManager role map is set to None::
 
         >>> obj.__ac_local_roles__ = None
+        >>> roles = DefaultLocalRoleAdapter(obj)
         >>> roles.getRoles('dummy')
         []
         >>> tuple(roles.getAllRoles())
@@ -38,6 +40,7 @@ class DefaultLocalRoleAdapter(object):
     And if we have some roles assigned, we get the expected behavior::
 
         >>> obj.__ac_local_roles__ = {'dummy': ['Role1', 'Role2']}
+        >>> roles = DefaultLocalRoleAdapter(obj)
         >>> roles.getRoles('dummy')
         ['Role1', 'Role2']
         >>> roles.getRoles('dummy2')
@@ -48,6 +51,7 @@ class DefaultLocalRoleAdapter(object):
     The __ac__local_roles__ attribute may be a callable::
 
         >>> obj.__ac_local_roles__ = lambda: {'dummy2': ['Role1']}
+        >>> roles = DefaultLocalRoleAdapter(obj)
         >>> roles.getRoles('dummy')
         []
         >>> roles.getRoles('dummy2')
@@ -60,7 +64,7 @@ class DefaultLocalRoleAdapter(object):
     def __init__(self, context):
         self.context = context
 
-    @property
+    @lazy_property
     def _rolemap(self):
         rolemap = getattr(self.context, '__ac_local_roles__', {})
         # None is the default value from AccessControl.Role.RoleMananger
