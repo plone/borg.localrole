@@ -43,7 +43,8 @@ setup(
         'Products.PluggableAuthService',
         'plone.memoize',
         'Acquisition',
-        'Zope2',
+        "Zope2;python_version<'3'",
+        "Zope;python_version>='3.6'",
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -62,6 +63,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )
