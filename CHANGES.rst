@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.1.9 (2022-11-14)
+------------------
+
+Bug fixes:
+
+
+- Add PEP 508 style requirements to not depend on Zope2 in Python 3. [jensens] (#12)
+
+
 3.1.8 (2020-04-20)
 ------------------
 
