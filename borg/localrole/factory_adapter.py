@@ -37,8 +37,8 @@ class FactoryTempFolderProvider(object):
         >>> temp = DummyObject().__of__(wrapped_factory)
         >>> newob = DummyObject().__of__(temp)
 
-        >>> from borg.localrole.tests import SimpleLocalRoleProvider
-        >>> from borg.localrole.tests import DummyUser
+        >>> from borg.localrole.tests.test_borg import SimpleLocalRoleProvider
+        >>> from borg.localrole.tests.test_borg import DummyUser
         >>> user1 = DummyUser('bogus_user1')
 
 

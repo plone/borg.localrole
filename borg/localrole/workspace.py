@@ -62,7 +62,7 @@ def clra_cache_key(method, self, user, obj, object_roles):
           ...     pass
           >>> obj = DummyObject()
 
-          >>> from borg.localrole.tests import DummyUser
+          >>> from borg.localrole.tests.test_borg import DummyUser
           >>> john = DummyUser('john')
 
           >>> rm = WorkspaceLocalRoleManager('rm', 'A Role Manager')
@@ -159,8 +159,8 @@ class WorkspaceLocalRoleManager(BasePlugin):
 
         >>> from zope.interface import implementer, Interface
         >>> from zope.component import adapter
-        >>> from borg.localrole.tests import SimpleLocalRoleProvider
-        >>> from borg.localrole.tests import DummyUser
+        >>> from borg.localrole.tests.test_borg import SimpleLocalRoleProvider
+        >>> from borg.localrole.tests.test_borg import DummyUser
         >>> from zope.component import provideAdapter
         >>> provideAdapter(SimpleLocalRoleProvider, adapts=(Interface,))
 
