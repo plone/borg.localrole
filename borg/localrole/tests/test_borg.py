@@ -82,6 +82,12 @@ def test_suite():
             ),
             layer=zca.UNIT_TESTING
         ),
-        doctest.DocTestSuite(default_adapter),
+        layered(
+            doctest.DocTestSuite(
+                default_adapter,
+                optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+            ),
+            layer=zca.UNIT_TESTING
+        ),
     ]
     return unittest.TestSuite(suite)
