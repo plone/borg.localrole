@@ -17,7 +17,7 @@ class IWorkspace(Interface):
         """Return a sequence of all local roles for a principal."""
 
     def getLocalRoles():
-        """Return a dictonary mapping principals to their roles within
+        """Return a dictionary mapping principals to their roles within
         a workspace.
         """
 
