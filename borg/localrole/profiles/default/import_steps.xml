@@ -1,7 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <import-steps>
-  <import-step id="borg_localrole_various" version="20071003-01"
+  <import-step id="borg_localrole_various"
                handler="borg.localrole.setuphandlers.importVarious"
-               title="borg.localrole plug-in installation">
- </import-step>
+               title="borg.localrole plug-in installation"
+               version="20071003-01"
+  >
+</import-step>
 </import-steps>

@@ -5,14 +5,15 @@
            the 'for' value -->
 
   <adapter
-     factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
-     provides="Products.GenericSetup.interfaces.IFilesystemExporter"
-     for="borg.localrole.workspace.WorkspaceLocalRoleManager" />
+      factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
+      provides="Products.GenericSetup.interfaces.IFilesystemExporter"
+      for="borg.localrole.workspace.WorkspaceLocalRoleManager"
+      />
 
   <adapter
-     factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
-     provides="Products.GenericSetup.interfaces.IFilesystemImporter"
-     for="borg.localrole.workspace.WorkspaceLocalRoleManager"
-     />
+      factory="Products.PluggableAuthService.plugins.exportimport.TitleOnlyExportImport"
+      provides="Products.GenericSetup.interfaces.IFilesystemImporter"
+      for="borg.localrole.workspace.WorkspaceLocalRoleManager"
+      />
 
 </configure>
