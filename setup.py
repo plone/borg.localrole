@@ -28,11 +28,12 @@ setup(
     extras_require=dict(
         test=[
             "plone.app.testing",
+            "plone.testing",
         ],
     ),
     install_requires=[
+        "AccessControl",
         "setuptools",
-        "six",
         "zope.annotation",
         "zope.component",
         "zope.deferredimport",
@@ -43,8 +44,7 @@ setup(
         "Products.PluggableAuthService",
         "plone.memoize",
         "Acquisition",
-        "Zope2;python_version<'3'",
-        "Zope;python_version>='3.6'",
+        "Zope",
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

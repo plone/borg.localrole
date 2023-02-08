@@ -8,7 +8,6 @@ from zope.interface import implementer
 import borg.localrole
 import doctest
 import re
-import six
 import unittest
 
 
@@ -45,14 +44,6 @@ class DummyUser:
         return ()
 
 
-class Py23DocChecker(doctest.OutputChecker):
-    def check_output(self, want, got, optionflags):
-        if six.PY2:
-            got = re.sub(r"set\(\[(.*?)\]\)", "{\\1}", got)
-            want = re.sub("plone.memoize.volatile.DontCache", "DontCache", want)
-        return doctest.OutputChecker.check_output(self, want, got, optionflags)
-
-
 def test_suite():
     suite = [
         layered(
@@ -67,7 +58,6 @@ def test_suite():
             doctest.DocTestSuite(
                 borg.localrole.workspace,
                 optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
-                checker=Py23DocChecker(),
             ),
             layer=zca.UNIT_TESTING,
         ),

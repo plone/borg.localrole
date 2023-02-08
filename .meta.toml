@@ -3,3 +3,8 @@
 [meta]
 template = "default"
 commit-id = "68486a87"
+
+[dependencies]
+mappings = [
+    "Zope = ['Products.PageTemplates', 'ZPublisher', ]",
+    ]
