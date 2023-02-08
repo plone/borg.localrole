@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from borg.localrole.interfaces import IFactoryTempFolder
@@ -10,7 +9,7 @@ from zope.interface import implementer
 
 @implementer(ILocalRoleProvider)
 @adapter(IFactoryTempFolder)
-class FactoryTempFolderProvider(object):
+class FactoryTempFolderProvider:
     """A simple local role provider which just gathers the roles from
     the desired context::
 

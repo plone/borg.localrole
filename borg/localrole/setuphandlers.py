@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from borg.localrole.utils import setup_localrole_plugin
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from borg.localrole import default_adapter
 from borg.localrole import factory_adapter
 from plone.app.testing import PLONE_INTEGRATION_TESTING
@@ -14,7 +13,7 @@ import unittest
 
 
 @implementer(borg.localrole.interfaces.ILocalRoleProvider)
-class SimpleLocalRoleProvider(object):
+class SimpleLocalRoleProvider:
 
     def __init__(self, context):
         self.context = context
@@ -29,7 +28,7 @@ class SimpleLocalRoleProvider(object):
         yield ('bogus_user', ('Foo', ))
 
 
-class DummyUser(object):
+class DummyUser:
     def __init__(self, uid, group_ids=()):
         self.id = uid
         self._groups = group_ids
@@ -50,7 +49,7 @@ class DummyUser(object):
 class Py23DocChecker(doctest.OutputChecker):
     def check_output(self, want, got, optionflags):
         if six.PY2:
-            got = re.sub("set\(\[(.*?)\]\)", "{\\1}", got)
+            got = re.sub(r"set\(\[(.*?)\]\)", "{\\1}", got)
             want = re.sub(
                 'plone.memoize.volatile.DontCache',
                 'DontCache', want

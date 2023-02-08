@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_get
 from Acquisition import aq_inner
@@ -39,7 +38,7 @@ def manage_addWorkspaceLocalRoleManager(
 
     if REQUEST is not None:
         REQUEST.RESPONSE.redirect(
-            '{0}/manage_workspace?'
+            '{}/manage_workspace?'
             'manage_tabs_message=WorkspaceLocalRoleManager+added.'.format(
                 dispatcher.absolute_url()
             )
