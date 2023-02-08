@@ -97,7 +97,7 @@ class FactoryTempFolderProvider:
         self.folder = obj
 
     def getRoles(self, principal_id):
-        uf = aq_inner(getToolByName(self.folder, 'acl_users'))
+        uf = aq_inner(getToolByName(self.folder, "acl_users"))
         user = aq_inner(uf.getUserById(principal_id, default=None))
         # use the folder we are creating in as role generating context
         source = aq_parent(aq_parent(self.folder))

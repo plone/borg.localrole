@@ -2,69 +2,69 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-name = 'borg.localrole'
-version = '3.1.10.dev0'
+name = "borg.localrole"
+version = "3.1.10.dev0"
 
-readme = open('README.rst').read()
-history = open('CHANGES.rst').read()
+readme = open("README.rst").read()
+history = open("CHANGES.rst").read()
 
 setup(
     name=name,
     version=version,
-    description='A PAS plugin which can manage local roles via an '
-                'adapter lookup on the current context',
-    long_description=readme + '\n' + history,
-    keywords='Plone PAS local roles',
-    author='Borg Collective',
-    author_email='borg@plone.org',
-    url='https://pypi.org/project/borg.localrole',
-    license='LGPL',
+    description="A PAS plugin which can manage local roles via an "
+    "adapter lookup on the current context",
+    long_description=readme + "\n" + history,
+    keywords="Plone PAS local roles",
+    author="Borg Collective",
+    author_email="borg@plone.org",
+    url="https://pypi.org/project/borg.localrole",
+    license="LGPL",
     packages=find_packages(),
-    namespace_packages=['borg'],
+    namespace_packages=["borg"],
     include_package_data=True,
-    platforms='Any',
+    platforms="Any",
     zip_safe=False,
     extras_require=dict(
         test=[
-            'plone.app.testing',
+            "plone.app.testing",
         ],
     ),
     install_requires=[
-        'setuptools',
-        'six',
-        'zope.annotation',
-        'zope.component',
-        'zope.deferredimport',
-        'zope.interface',
-        'Products.CMFCore',
-        'Products.GenericSetup',
-        'Products.PlonePAS >= 5.0.1',
-        'Products.PluggableAuthService',
-        'plone.memoize',
-        'Acquisition',
+        "setuptools",
+        "six",
+        "zope.annotation",
+        "zope.component",
+        "zope.deferredimport",
+        "zope.interface",
+        "Products.CMFCore",
+        "Products.GenericSetup",
+        "Products.PlonePAS >= 5.0.1",
+        "Products.PluggableAuthService",
+        "plone.memoize",
+        "Acquisition",
         "Zope2;python_version<'3'",
         "Zope;python_version>='3.6'",
     ],
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Web Environment',
-        'Framework :: Plone',
-        'Framework :: Plone :: 5.0',
-        'Framework :: Plone :: 5.1',
-        'Framework :: Plone :: 5.2',
-        'Framework :: Plone :: Core',
-        'Intended Audience :: Other Audience',
-        'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',  # noqa
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-        'Programming Language :: Python :: 3.11',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Web Environment",
+        "Framework :: Plone",
+        "Framework :: Plone :: 5.0",
+        "Framework :: Plone :: 5.1",
+        "Framework :: Plone :: 5.2",
+        "Framework :: Plone :: Core",
+        "Intended Audience :: Other Audience",
+        "Intended Audience :: System Administrators",
+        "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",  # noqa
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 )

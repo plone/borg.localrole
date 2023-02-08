@@ -16,5 +16,5 @@ def initialize(context):
             workspace.manage_addWorkspaceLocalRoleManagerForm,
             workspace.manage_addWorkspaceLocalRoleManager,
         ),
-        visibility=None
+        visibility=None,
     )

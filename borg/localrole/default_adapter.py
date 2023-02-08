@@ -61,7 +61,7 @@ class DefaultLocalRoleAdapter:
 
     @property
     def _rolemap(self):
-        rolemap = getattr(self.context, '__ac_local_roles__', {})
+        rolemap = getattr(self.context, "__ac_local_roles__", {})
         # None is the default value from AccessControl.Role.RoleMananger
         if rolemap is None:
             return {}
