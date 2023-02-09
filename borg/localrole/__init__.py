@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl.Permissions import add_user_folders
 from borg.localrole import workspace
 from Products.PluggableAuthService import registerMultiPlugin
@@ -17,5 +16,5 @@ def initialize(context):
             workspace.manage_addWorkspaceLocalRoleManagerForm,
             workspace.manage_addWorkspaceLocalRoleManager,
         ),
-        visibility=None
+        visibility=None,
     )
