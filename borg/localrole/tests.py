@@ -7,7 +7,6 @@ from zope.interface import implementer
 
 import borg.localrole
 import doctest
-import re
 import unittest
 
 
