@@ -6,7 +6,9 @@
     tal:replace="structure here/manage_form_title"
 >Form Title</h2>
 
-<p class="form-help">
+<p class="form-help"
+   i18n:ignore="true"
+>
   Install a Workspace local role manager. This plugin will enable
   workspaces to provide the correct local rules for users assigned
   to that workspace.
@@ -17,13 +19,17 @@
 >
   <table>
     <tr>
-      <td class="form-label">Id</td>
+      <td class="form-label"
+          i18n:ignore="true"
+      >Id</td>
       <td><input name="id"
                type="text"
         /></td>
     </tr>
     <tr>
-      <td class="form-label">Title</td>
+      <td class="form-label"
+          i18n:ignore="true"
+      >Title</td>
       <td><input name="Title"
                type="text"
         /></td>
@@ -33,6 +39,7 @@
         <div class="form-element">
           <input type="submit"
                  value="Add local role manager"
+                 i18n:ignore-attributes="value"
           />
         </div>
       </td>
