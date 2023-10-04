@@ -1,3 +1,4 @@
+from pathlib import Path
 from setuptools import find_packages
 from setuptools import setup
 
@@ -5,15 +6,17 @@ from setuptools import setup
 name = "borg.localrole"
 version = "3.1.11.dev0"
 
-readme = open("README.rst").read()
-history = open("CHANGES.rst").read()
+long_description = (
+    f"{Path('README.rst').read_text()}\n{Path('CHANGES.rst').read_text()}"
+)
 
 setup(
     name=name,
     version=version,
     description="A PAS plugin which can manage local roles via an "
     "adapter lookup on the current context",
-    long_description=readme + "\n" + history,
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
     keywords="Plone PAS local roles",
     author="Borg Collective",
     author_email="borg@plone.org",
@@ -46,6 +49,8 @@ setup(
         "Acquisition",
         "Zope",
     ],
+    # Get more strings from
+    # https://pypi.org/classifiers/
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
@@ -59,9 +64,6 @@ setup(
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",  # noqa
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
