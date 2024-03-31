@@ -22,7 +22,6 @@ setup(
     url="https://pypi.org/project/borg.localrole",
     license="LGPL",
     packages=["borg.localrole"],
-    namespace_packages=["borg"],
     package_dir={"": "src"},
     include_package_data=True,
     platforms="Any",
