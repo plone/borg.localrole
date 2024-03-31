@@ -1,5 +1,4 @@
 from pathlib import Path
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -22,8 +21,9 @@ setup(
     author_email="borg@plone.org",
     url="https://pypi.org/project/borg.localrole",
     license="LGPL",
-    packages=find_packages(),
+    packages=["borg.localrole"],
     namespace_packages=["borg"],
+    package_dir={"": "src"},
     include_package_data=True,
     platforms="Any",
     zip_safe=False,
