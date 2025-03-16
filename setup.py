@@ -1,5 +1,4 @@
 from pathlib import Path
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -22,8 +21,8 @@ setup(
     author_email="borg@plone.org",
     url="https://pypi.org/project/borg.localrole",
     license="LGPL",
-    packages=find_packages(),
-    namespace_packages=["borg"],
+    packages=["borg.localrole"],
+    package_dir={"": "src"},
     include_package_data=True,
     platforms="Any",
     zip_safe=False,
@@ -55,9 +54,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
-        "Framework :: Plone :: 5.0",
-        "Framework :: Plone :: 5.1",
-        "Framework :: Plone :: 5.2",
+        "Framework :: Plone :: 7.0",
         "Framework :: Plone :: Core",
         "Intended Audience :: Other Audience",
         "Intended Audience :: System Administrators",
