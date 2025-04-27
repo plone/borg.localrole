@@ -1,6 +1,6 @@
 include *.rst
 
-graft borg
+graft src
 
 global-exclude *pyc
 include pyproject.toml
