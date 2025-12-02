@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0 (2025-12-02)
+------------------
+
+Breaking changes:
+
+
+- Make major release.
+  Versions 3.1.10 and 3.1.11 (from 2023) are backwards incompatible with Plone 5.2.
+  A 3.x branch was made, but we forgot to bump the version on the master branch.
+  [maurits] (#14)
+
+
 3.1.11 (2023-10-07)
 -------------------
 
