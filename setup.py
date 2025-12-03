@@ -28,7 +28,7 @@ setup(
     include_package_data=True,
     platforms="Any",
     zip_safe=False,
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     extras_require=dict(
         test=[
             "plone.app.testing",
@@ -56,19 +56,19 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
-        "Framework :: Plone :: 5.0",
-        "Framework :: Plone :: 5.1",
-        "Framework :: Plone :: 5.2",
+        "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.1",
         "Framework :: Plone :: Core",
         "Intended Audience :: Other Audience",
         "Intended Audience :: System Administrators",
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",  # noqa
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 )
