@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.1 (2025-12-03)
+------------------
+
+Internal:
+
+
+- Move to src-layout.  [maurits]
+
+
 4.0.0 (2025-12-02)
 ------------------
 
