@@ -1,3 +1,0 @@
-Rerelease 3.1.9 as 3.1.12.
-3.1.10 and 3.1.11 had changes incompatible with Plone 5.2.
-[maurits]
