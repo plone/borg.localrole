@@ -2,7 +2,6 @@ from AccessControl.Permissions import add_user_folders
 from borg.localrole import workspace
 from Products.PluggableAuthService import registerMultiPlugin
 
-
 registerMultiPlugin(workspace.WorkspaceLocalRoleManager.meta_type)
 
 

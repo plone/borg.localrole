@@ -17,7 +17,6 @@ from Products.PluggableAuthService.utils import classImplements
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapters
 
-
 manage_addWorkspaceLocalRoleManagerForm = PageTemplateFile(
     "zmi/WorkspaceLocalRoleManagerForm.pt",
     globals(),
