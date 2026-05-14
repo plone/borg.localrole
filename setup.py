@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup
 
 name = "borg.localrole"
-version = "5.0.0"
+version = "5.0.1.dev0"
 
 long_description = (
     f"{Path('README.rst').read_text()}\n{Path('CHANGES.rst').read_text()}"
