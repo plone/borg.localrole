@@ -10,7 +10,7 @@ requires = ["setuptools>=68.2,<83", "wheel"]
 
 [project]
 name = "borg.localrole"
-version = "5.0.1"
+version = "5.0.2.dev0"
 description = "A PAS plugin which can manage local roles via an adapter lookup on the current context"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
